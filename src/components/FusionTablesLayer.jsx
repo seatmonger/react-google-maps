@@ -5,24 +5,24 @@
  * -----------------------------------------------------------------------------
  */
 /* global google */
-import React from "react"
-import PropTypes from "prop-types"
+import { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import {
   construct,
   componentDidMount,
   componentDidUpdate,
   componentWillUnmount,
-} from "../utils/MapChildHelper"
+} from '../utils/MapChildHelper';
 
-import { MAP, FUSION_TABLES_LAYER } from "../constants"
+import { MAP, FUSION_TABLES_LAYER } from '../constants';
 
 /**
  * A wrapper around `google.maps.FusionTablesLayer`
  *
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#FusionTablesLayer
  */
-export class FusionTablesLayer extends React.PureComponent {
+export class FusionTablesLayer extends PureComponent {
   static propTypes = {
     /**
      * @type FusionTablesLayerOptions
@@ -38,32 +38,32 @@ export class FusionTablesLayer extends React.PureComponent {
      * function
      */
     onClick: PropTypes.func,
-  }
+  };
 
   static contextTypes = {
     [MAP]: PropTypes.object,
-  }
+  };
 
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#FusionTablesLayer
    */
   constructor(props, context) {
-    super(props, context)
-    const fusionTablesLayer = new google.maps.FusionTablesLayer()
+    super(props, context);
+    const fusionTablesLayer = new google.maps.FusionTablesLayer();
     construct(
       FusionTablesLayer.propTypes,
       updaterMap,
       this.props,
       fusionTablesLayer
-    )
-    fusionTablesLayer.setMap(this.context[MAP])
+    );
+    fusionTablesLayer.setMap(this.context[MAP]);
     this.state = {
       [FUSION_TABLES_LAYER]: fusionTablesLayer,
-    }
+    };
   }
 
   componentDidMount() {
-    componentDidMount(this, this.state[FUSION_TABLES_LAYER], eventMap)
+    componentDidMount(this, this.state[FUSION_TABLES_LAYER], eventMap);
   }
 
   componentDidUpdate(prevProps) {
@@ -73,30 +73,30 @@ export class FusionTablesLayer extends React.PureComponent {
       eventMap,
       updaterMap,
       prevProps
-    )
+    );
   }
 
   componentWillUnmount() {
-    componentWillUnmount(this)
-    const fusionTablesLayer = this.state[FUSION_TABLES_LAYER]
+    componentWillUnmount(this);
+    const fusionTablesLayer = this.state[FUSION_TABLES_LAYER];
     if (fusionTablesLayer) {
-      fusionTablesLayer.setMap(null)
+      fusionTablesLayer.setMap(null);
     }
   }
 
   render() {
-    return false
+    return false;
   }
 }
 
-export default FusionTablesLayer
+export default FusionTablesLayer;
 
 const eventMap = {
-  onClick: "click",
-}
+  onClick: 'click',
+};
 
 const updaterMap = {
   options(instance, options) {
-    instance.setOptions(options)
+    instance.setOptions(options);
   },
-}
+};

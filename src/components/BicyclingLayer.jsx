@@ -5,45 +5,45 @@
  * -----------------------------------------------------------------------------
  */
 /* global google */
-import React from "react"
-import PropTypes from "prop-types"
+import { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import {
   construct,
   componentDidMount,
   componentDidUpdate,
   componentWillUnmount,
-} from "../utils/MapChildHelper"
+} from '../utils/MapChildHelper';
 
-import { MAP, BICYCLING_LAYER } from "../constants"
+import { MAP, BICYCLING_LAYER } from '../constants';
 
 /**
  * A wrapper around `google.maps.BicyclingLayer`
  *
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#BicyclingLayer
  */
-export class BicyclingLayer extends React.PureComponent {
-  static propTypes = {}
+export class BicyclingLayer extends PureComponent {
+  static propTypes = {};
 
   static contextTypes = {
     [MAP]: PropTypes.object,
-  }
+  };
 
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#BicyclingLayer
    */
   constructor(props, context) {
-    super(props, context)
-    const bicyclingLayer = new google.maps.BicyclingLayer()
-    construct(BicyclingLayer.propTypes, updaterMap, this.props, bicyclingLayer)
-    bicyclingLayer.setMap(this.context[MAP])
+    super(props, context);
+    const bicyclingLayer = new google.maps.BicyclingLayer();
+    construct(BicyclingLayer.propTypes, updaterMap, this.props, bicyclingLayer);
+    bicyclingLayer.setMap(this.context[MAP]);
     this.state = {
       [BICYCLING_LAYER]: bicyclingLayer,
-    }
+    };
   }
 
   componentDidMount() {
-    componentDidMount(this, this.state[BICYCLING_LAYER], eventMap)
+    componentDidMount(this, this.state[BICYCLING_LAYER], eventMap);
   }
 
   componentDidUpdate(prevProps) {
@@ -53,24 +53,24 @@ export class BicyclingLayer extends React.PureComponent {
       eventMap,
       updaterMap,
       prevProps
-    )
+    );
   }
 
   componentWillUnmount() {
-    componentWillUnmount(this)
-    const bicyclingLayer = this.state[BICYCLING_LAYER]
+    componentWillUnmount(this);
+    const bicyclingLayer = this.state[BICYCLING_LAYER];
     if (bicyclingLayer) {
-      bicyclingLayer.setMap(null)
+      bicyclingLayer.setMap(null);
     }
   }
 
   render() {
-    return false
+    return false;
   }
 }
 
-export default BicyclingLayer
+export default BicyclingLayer;
 
-const eventMap = {}
+const eventMap = {};
 
-const updaterMap = {}
+const updaterMap = {};

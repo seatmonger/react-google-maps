@@ -1,17 +1,17 @@
 /* global google */
-import React from "react"
-import PropTypes from "prop-types"
-import makeMarkerWithLabel from "markerwithlabel"
-import ReactDOM from "react-dom"
+import { Children, PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import makeMarkerWithLabel from 'markerwithlabel';
+import ReactDOM from 'react-dom';
 
 import {
   componentDidMount,
   componentDidUpdate,
   componentWillUnmount,
   construct,
-} from "../../utils/MapChildHelper"
+} from '../../utils/MapChildHelper';
 
-import { MAP, MARKER_CLUSTERER, MARKER_WITH_LABEL } from "../../constants"
+import { MAP, MARKER_CLUSTERER, MARKER_WITH_LABEL } from '../../constants';
 
 export const __jscodeshiftPlaceholder__ = `{
   "KlassNameOverrride": "Marker",
@@ -26,14 +26,14 @@ export const __jscodeshiftPlaceholder__ = `{
     "onRightClick": "rightclick"
   },
   "getInstanceFromComponent": "this.state[MARKER_WITH_LABEL]"
-}`
+}`;
 
 /**
  * A wrapper around `MarkerWithLabel`
  *
  * @see https://cdn.rawgit.com/googlemaps/v3-utility-library/master/markerwithlabel/src/markerwithlabel.js
  */
-export class MarkerWithLabel extends React.PureComponent {
+export class MarkerWithLabel extends PureComponent {
   static propTypes = {
     __jscodeshiftPlaceholder__: null,
     /**
@@ -67,50 +67,50 @@ export class MarkerWithLabel extends React.PureComponent {
      * @see https://github.com/mikesaidani/marker-clusterer-plus
      */
     noRedraw: PropTypes.bool,
-  }
+  };
 
   static defaultProps = {
     labelVisible: true,
-  }
+  };
 
   static contextTypes = {
     [MAP]: PropTypes.object,
     [MARKER_CLUSTERER]: PropTypes.object,
-  }
+  };
 
   /*
    * @see https://cdn.rawgit.com/googlemaps/v3-utility-library/master/markerwithlabel/src/markerwithlabel.js
    */
   constructor(props, context) {
-    super(props, context)
-    const NativeMarkerWithLabel = makeMarkerWithLabel(google.maps)
-    const markerWithLabel = new NativeMarkerWithLabel()
+    super(props, context);
+    const NativeMarkerWithLabel = makeMarkerWithLabel(google.maps);
+    const markerWithLabel = new NativeMarkerWithLabel();
     construct(
       MarkerWithLabel.propTypes,
       updaterMap,
       this.props,
       markerWithLabel
-    )
-    const markerClusterer = this.context[MARKER_CLUSTERER]
+    );
+    const markerClusterer = this.context[MARKER_CLUSTERER];
     if (markerClusterer) {
-      markerClusterer.addMarker(markerWithLabel, !!this.props.noRedraw)
+      markerClusterer.addMarker(markerWithLabel, !!this.props.noRedraw);
     } else {
-      markerWithLabel.setMap(this.context[MAP])
+      markerWithLabel.setMap(this.context[MAP]);
     }
     this.state = {
       [MARKER_WITH_LABEL]: markerWithLabel,
-    }
+    };
   }
 
   componentDidMount() {
-    componentDidMount(this, this.state[MARKER_WITH_LABEL], eventMap)
-    const container = document.createElement(`div`)
+    componentDidMount(this, this.state[MARKER_WITH_LABEL], eventMap);
+    const container = document.createElement(`div`);
     ReactDOM.unstable_renderSubtreeIntoContainer(
       this,
-      React.Children.only(this.props.children),
+      Children.only(this.props.children),
       container
-    )
-    this.state[MARKER_WITH_LABEL].set(`labelContent`, container)
+    );
+    this.state[MARKER_WITH_LABEL].set(`labelContent`, container);
   }
 
   componentDidUpdate(prevProps) {
@@ -120,39 +120,39 @@ export class MarkerWithLabel extends React.PureComponent {
       eventMap,
       updaterMap,
       prevProps
-    )
+    );
     if (this.props.children !== prevProps.children) {
       ReactDOM.unstable_renderSubtreeIntoContainer(
         this,
-        React.Children.only(this.props.children),
-        this.state[MARKER_WITH_LABEL].get("labelContent")
-      )
+        Children.only(this.props.children),
+        this.state[MARKER_WITH_LABEL].get('labelContent')
+      );
     }
   }
 
   componentWillUnmount() {
-    componentWillUnmount(this)
-    const markerWithLabel = this.state[MARKER_WITH_LABEL]
+    componentWillUnmount(this);
+    const markerWithLabel = this.state[MARKER_WITH_LABEL];
     if (markerWithLabel) {
-      const markerClusterer = this.context[MARKER_CLUSTERER]
+      const markerClusterer = this.context[MARKER_CLUSTERER];
       if (markerClusterer) {
-        markerClusterer.removeMarker(markerWithLabel, !!this.props.noRedraw)
+        markerClusterer.removeMarker(markerWithLabel, !!this.props.noRedraw);
       }
-      if (markerWithLabel.get("labelContent")) {
-        ReactDOM.unmountComponentAtNode(markerWithLabel.get("labelContent"))
+      if (markerWithLabel.get('labelContent')) {
+        ReactDOM.unmountComponentAtNode(markerWithLabel.get('labelContent'));
       }
-      markerWithLabel.setMap(null)
+      markerWithLabel.setMap(null);
     }
   }
 
   render() {
-    return false
+    return false;
   }
 }
 
-export default MarkerWithLabel
+export default MarkerWithLabel;
 
-const eventMap = {}
+const eventMap = {};
 
 const updaterMap = {
   /**
@@ -160,27 +160,27 @@ const updaterMap = {
    * @see https://cdn.rawgit.com/googlemaps/v3-utility-library/master/markerwithlabel/src/markerwithlabel.js
    */
   labelAnchor(instance, labelAnchor) {
-    instance.set(`labelAnchor`, labelAnchor)
+    instance.set(`labelAnchor`, labelAnchor);
   },
   /**
    * For `MarkerWithLabel`
    * @see https://cdn.rawgit.com/googlemaps/v3-utility-library/master/markerwithlabel/src/markerwithlabel.js
    */
   labelClass(instance, labelClass) {
-    instance.set(`labelClass`, labelClass)
+    instance.set(`labelClass`, labelClass);
   },
   /**
    * For `MarkerWithLabel`
    * @see https://cdn.rawgit.com/googlemaps/v3-utility-library/master/markerwithlabel/src/markerwithlabel.js
    */
   labelStyle(instance, labelStyle) {
-    instance.set(`labelStyle`, labelStyle)
+    instance.set(`labelStyle`, labelStyle);
   },
   /**
    * For `MarkerWithLabel`
    * @see https://cdn.rawgit.com/googlemaps/v3-utility-library/master/markerwithlabel/src/markerwithlabel.js
    */
   labelVisible(instance, labelVisible) {
-    instance.set(`labelVisible`, labelVisible)
+    instance.set(`labelVisible`, labelVisible);
   },
-}
+};

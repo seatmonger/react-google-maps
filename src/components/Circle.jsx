@@ -5,24 +5,24 @@
  * -----------------------------------------------------------------------------
  */
 /* global google */
-import React from "react"
-import PropTypes from "prop-types"
+import { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import {
   construct,
   componentDidMount,
   componentDidUpdate,
   componentWillUnmount,
-} from "../utils/MapChildHelper"
+} from '../utils/MapChildHelper';
 
-import { MAP, CIRCLE } from "../constants"
+import { MAP, CIRCLE } from '../constants';
 
 /**
  * A wrapper around `google.maps.Circle`
  *
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Circle
  */
-export class Circle extends React.PureComponent {
+export class Circle extends PureComponent {
   static propTypes = {
     /**
      * @type LatLng|LatLngLiteral
@@ -148,27 +148,27 @@ export class Circle extends React.PureComponent {
      * function
      */
     onRadiusChanged: PropTypes.func,
-  }
+  };
 
   static contextTypes = {
     [MAP]: PropTypes.object,
-  }
+  };
 
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Circle
    */
   constructor(props, context) {
-    super(props, context)
-    const circle = new google.maps.Circle()
-    construct(Circle.propTypes, updaterMap, this.props, circle)
-    circle.setMap(this.context[MAP])
+    super(props, context);
+    const circle = new google.maps.Circle();
+    construct(Circle.propTypes, updaterMap, this.props, circle);
+    circle.setMap(this.context[MAP]);
     this.state = {
       [CIRCLE]: circle,
-    }
+    };
   }
 
   componentDidMount() {
-    componentDidMount(this, this.state[CIRCLE], eventMap)
+    componentDidMount(this, this.state[CIRCLE], eventMap);
   }
 
   componentDidUpdate(prevProps) {
@@ -178,19 +178,19 @@ export class Circle extends React.PureComponent {
       eventMap,
       updaterMap,
       prevProps
-    )
+    );
   }
 
   componentWillUnmount() {
-    componentWillUnmount(this)
-    const circle = this.state[CIRCLE]
+    componentWillUnmount(this);
+    const circle = this.state[CIRCLE];
     if (circle) {
-      circle.setMap(null)
+      circle.setMap(null);
     }
   }
 
   render() {
-    return false
+    return false;
   }
 
   /**
@@ -199,7 +199,7 @@ export class Circle extends React.PureComponent {
    * @public
    */
   getBounds() {
-    return this.state[CIRCLE].getBounds()
+    return this.state[CIRCLE].getBounds();
   }
 
   /**
@@ -208,7 +208,7 @@ export class Circle extends React.PureComponent {
    * @public
    */
   getCenter() {
-    return this.state[CIRCLE].getCenter()
+    return this.state[CIRCLE].getCenter();
   }
 
   /**
@@ -217,7 +217,7 @@ export class Circle extends React.PureComponent {
    * @public
    */
   getDraggable() {
-    return this.state[CIRCLE].getDraggable()
+    return this.state[CIRCLE].getDraggable();
   }
 
   /**
@@ -226,7 +226,7 @@ export class Circle extends React.PureComponent {
    * @public
    */
   getEditable() {
-    return this.state[CIRCLE].getEditable()
+    return this.state[CIRCLE].getEditable();
   }
 
   /**
@@ -235,7 +235,7 @@ export class Circle extends React.PureComponent {
    * @public
    */
   getRadius() {
-    return this.state[CIRCLE].getRadius()
+    return this.state[CIRCLE].getRadius();
   }
 
   /**
@@ -244,50 +244,50 @@ export class Circle extends React.PureComponent {
    * @public
    */
   getVisible() {
-    return this.state[CIRCLE].getVisible()
+    return this.state[CIRCLE].getVisible();
   }
 }
 
-export default Circle
+export default Circle;
 
 const eventMap = {
-  onDblClick: "dblclick",
-  onDragEnd: "dragend",
-  onDragStart: "dragstart",
-  onMouseDown: "mousedown",
-  onMouseMove: "mousemove",
-  onMouseOut: "mouseout",
-  onMouseOver: "mouseover",
-  onMouseUp: "mouseup",
-  onRightClick: "rightclick",
-  onCenterChanged: "center_changed",
-  onClick: "click",
-  onDrag: "drag",
-  onRadiusChanged: "radius_changed",
-}
+  onDblClick: 'dblclick',
+  onDragEnd: 'dragend',
+  onDragStart: 'dragstart',
+  onMouseDown: 'mousedown',
+  onMouseMove: 'mousemove',
+  onMouseOut: 'mouseout',
+  onMouseOver: 'mouseover',
+  onMouseUp: 'mouseup',
+  onRightClick: 'rightclick',
+  onCenterChanged: 'center_changed',
+  onClick: 'click',
+  onDrag: 'drag',
+  onRadiusChanged: 'radius_changed',
+};
 
 const updaterMap = {
   center(instance, center) {
-    instance.setCenter(center)
+    instance.setCenter(center);
   },
 
   draggable(instance, draggable) {
-    instance.setDraggable(draggable)
+    instance.setDraggable(draggable);
   },
 
   editable(instance, editable) {
-    instance.setEditable(editable)
+    instance.setEditable(editable);
   },
 
   options(instance, options) {
-    instance.setOptions(options)
+    instance.setOptions(options);
   },
 
   radius(instance, radius) {
-    instance.setRadius(radius)
+    instance.setRadius(radius);
   },
 
   visible(instance, visible) {
-    instance.setVisible(visible)
+    instance.setVisible(visible);
   },
-}
+};

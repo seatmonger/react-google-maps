@@ -5,24 +5,24 @@
  * -----------------------------------------------------------------------------
  */
 /* global google */
-import React from "react"
-import PropTypes from "prop-types"
+import { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import {
   construct,
   componentDidMount,
   componentDidUpdate,
   componentWillUnmount,
-} from "../utils/MapChildHelper"
+} from '../utils/MapChildHelper';
 
-import { MAP, RECTANGLE } from "../constants"
+import { MAP, RECTANGLE } from '../constants';
 
 /**
  * A wrapper around `google.maps.Rectangle`
  *
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Rectangle
  */
-export class Rectangle extends React.PureComponent {
+export class Rectangle extends PureComponent {
   static propTypes = {
     /**
      * @type LatLngBounds|LatLngBoundsLiteral
@@ -133,27 +133,27 @@ export class Rectangle extends React.PureComponent {
      * function
      */
     onDrag: PropTypes.func,
-  }
+  };
 
   static contextTypes = {
     [MAP]: PropTypes.object,
-  }
+  };
 
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Rectangle
    */
   constructor(props, context) {
-    super(props, context)
-    const rectangle = new google.maps.Rectangle()
-    construct(Rectangle.propTypes, updaterMap, this.props, rectangle)
-    rectangle.setMap(this.context[MAP])
+    super(props, context);
+    const rectangle = new google.maps.Rectangle();
+    construct(Rectangle.propTypes, updaterMap, this.props, rectangle);
+    rectangle.setMap(this.context[MAP]);
     this.state = {
       [RECTANGLE]: rectangle,
-    }
+    };
   }
 
   componentDidMount() {
-    componentDidMount(this, this.state[RECTANGLE], eventMap)
+    componentDidMount(this, this.state[RECTANGLE], eventMap);
   }
 
   componentDidUpdate(prevProps) {
@@ -163,19 +163,19 @@ export class Rectangle extends React.PureComponent {
       eventMap,
       updaterMap,
       prevProps
-    )
+    );
   }
 
   componentWillUnmount() {
-    componentWillUnmount(this)
-    const rectangle = this.state[RECTANGLE]
+    componentWillUnmount(this);
+    const rectangle = this.state[RECTANGLE];
     if (rectangle) {
-      rectangle.setMap(null)
+      rectangle.setMap(null);
     }
   }
 
   render() {
-    return false
+    return false;
   }
 
   /**
@@ -184,7 +184,7 @@ export class Rectangle extends React.PureComponent {
    * @public
    */
   getBounds() {
-    return this.state[RECTANGLE].getBounds()
+    return this.state[RECTANGLE].getBounds();
   }
 
   /**
@@ -193,7 +193,7 @@ export class Rectangle extends React.PureComponent {
    * @public
    */
   getDraggable() {
-    return this.state[RECTANGLE].getDraggable()
+    return this.state[RECTANGLE].getDraggable();
   }
 
   /**
@@ -202,7 +202,7 @@ export class Rectangle extends React.PureComponent {
    * @public
    */
   getEditable() {
-    return this.state[RECTANGLE].getEditable()
+    return this.state[RECTANGLE].getEditable();
   }
 
   /**
@@ -211,45 +211,45 @@ export class Rectangle extends React.PureComponent {
    * @public
    */
   getVisible() {
-    return this.state[RECTANGLE].getVisible()
+    return this.state[RECTANGLE].getVisible();
   }
 }
 
-export default Rectangle
+export default Rectangle;
 
 const eventMap = {
-  onDblClick: "dblclick",
-  onDragEnd: "dragend",
-  onDragStart: "dragstart",
-  onMouseDown: "mousedown",
-  onMouseMove: "mousemove",
-  onMouseOut: "mouseout",
-  onMouseOver: "mouseover",
-  onMouseUp: "mouseup",
-  onRightClick: "rightclick",
-  onBoundsChanged: "bounds_changed",
-  onClick: "click",
-  onDrag: "drag",
-}
+  onDblClick: 'dblclick',
+  onDragEnd: 'dragend',
+  onDragStart: 'dragstart',
+  onMouseDown: 'mousedown',
+  onMouseMove: 'mousemove',
+  onMouseOut: 'mouseout',
+  onMouseOver: 'mouseover',
+  onMouseUp: 'mouseup',
+  onRightClick: 'rightclick',
+  onBoundsChanged: 'bounds_changed',
+  onClick: 'click',
+  onDrag: 'drag',
+};
 
 const updaterMap = {
   bounds(instance, bounds) {
-    instance.setBounds(bounds)
+    instance.setBounds(bounds);
   },
 
   draggable(instance, draggable) {
-    instance.setDraggable(draggable)
+    instance.setDraggable(draggable);
   },
 
   editable(instance, editable) {
-    instance.setEditable(editable)
+    instance.setEditable(editable);
   },
 
   options(instance, options) {
-    instance.setOptions(options)
+    instance.setOptions(options);
   },
 
   visible(instance, visible) {
-    instance.setVisible(visible)
+    instance.setVisible(visible);
   },
-}
+};

@@ -5,25 +5,25 @@
  * -----------------------------------------------------------------------------
  */
 /* global google */
-import warning from "warning"
-import React from "react"
-import PropTypes from "prop-types"
+import warning from 'warning';
+import { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import {
   construct,
   componentDidMount,
   componentDidUpdate,
   componentWillUnmount,
-} from "../utils/MapChildHelper"
+} from '../utils/MapChildHelper';
 
-import { MAP, GROUND_LAYER } from "../constants"
+import { MAP, GROUND_LAYER } from '../constants';
 
 /**
  * A wrapper around `google.maps.GroundOverlay`
  *
  * @see https://developers.google.com/maps/documentation/javascript/reference#GroundOverlay
  */
-export class GroundOverlay extends React.PureComponent {
+export class GroundOverlay extends PureComponent {
   static propTypes = {
     /**
      * @type string
@@ -66,17 +66,17 @@ export class GroundOverlay extends React.PureComponent {
      * function
      */
     onClick: PropTypes.func,
-  }
+  };
 
   static contextTypes = {
     [MAP]: PropTypes.object,
-  }
+  };
 
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#GroundOverlay
    */
   constructor(props, context) {
-    super(props, context)
+    super(props, context);
     warning(
       !props.url || !props.bounds,
       `
@@ -91,20 +91,20 @@ For GroundOveray, url and bounds are passed in to constructor and are immutable
  component. Typically, just \`key={url}\` would serve your need.
  See https://github.com/tomchentw/react-google-maps/issues/655
 `
-    )
+    );
     const groundOverlay = new google.maps.GroundOverlay(
       props.defaultUrl || props.url,
       props.defaultBounds || props.bounds
-    )
-    construct(GroundOverlay.propTypes, updaterMap, this.props, groundOverlay)
-    groundOverlay.setMap(this.context[MAP])
+    );
+    construct(GroundOverlay.propTypes, updaterMap, this.props, groundOverlay);
+    groundOverlay.setMap(this.context[MAP]);
     this.state = {
       [GROUND_LAYER]: groundOverlay,
-    }
+    };
   }
 
   componentDidMount() {
-    componentDidMount(this, this.state[GROUND_LAYER], eventMap)
+    componentDidMount(this, this.state[GROUND_LAYER], eventMap);
   }
 
   componentDidUpdate(prevProps) {
@@ -114,19 +114,19 @@ For GroundOveray, url and bounds are passed in to constructor and are immutable
       eventMap,
       updaterMap,
       prevProps
-    )
+    );
   }
 
   componentWillUnmount() {
-    componentWillUnmount(this)
-    const GroundOverlay = this.state[GROUND_LAYER]
+    componentWillUnmount(this);
+    const GroundOverlay = this.state[GROUND_LAYER];
     if (GroundOverlay) {
-      GroundOverlay.setMap(null)
+      GroundOverlay.setMap(null);
     }
   }
 
   render() {
-    return false
+    return false;
   }
 
   /**
@@ -135,7 +135,7 @@ For GroundOveray, url and bounds are passed in to constructor and are immutable
    * @public
    */
   getBounds() {
-    return this.state[GROUND_LAYER].getBounds()
+    return this.state[GROUND_LAYER].getBounds();
   }
 
   /**
@@ -144,7 +144,7 @@ For GroundOveray, url and bounds are passed in to constructor and are immutable
    * @public
    */
   getOpacity() {
-    return this.state[GROUND_LAYER].getOpacity()
+    return this.state[GROUND_LAYER].getOpacity();
   }
 
   /**
@@ -153,19 +153,19 @@ For GroundOveray, url and bounds are passed in to constructor and are immutable
    * @public
    */
   getUrl() {
-    return this.state[GROUND_LAYER].getUrl()
+    return this.state[GROUND_LAYER].getUrl();
   }
 }
 
-export default GroundOverlay
+export default GroundOverlay;
 
 const eventMap = {
-  onDblClick: "dblclick",
-  onClick: "click",
-}
+  onDblClick: 'dblclick',
+  onClick: 'click',
+};
 
 const updaterMap = {
   opacity(instance, opacity) {
-    instance.setOpacity(opacity)
+    instance.setOpacity(opacity);
   },
-}
+};

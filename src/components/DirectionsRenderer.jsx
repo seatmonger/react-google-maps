@@ -5,24 +5,24 @@
  * -----------------------------------------------------------------------------
  */
 /* global google */
-import React from "react"
-import PropTypes from "prop-types"
+import { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import {
   construct,
   componentDidMount,
   componentDidUpdate,
   componentWillUnmount,
-} from "../utils/MapChildHelper"
+} from '../utils/MapChildHelper';
 
-import { MAP, DIRECTIONS_RENDERER } from "../constants"
+import { MAP, DIRECTIONS_RENDERER } from '../constants';
 
 /**
  * A wrapper around `google.maps.DirectionsRenderer`
  *
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#DirectionsRenderer
  */
-export class DirectionsRenderer extends React.PureComponent {
+export class DirectionsRenderer extends PureComponent {
   static propTypes = {
     /**
      * @type DirectionsResult
@@ -68,32 +68,32 @@ export class DirectionsRenderer extends React.PureComponent {
      * function
      */
     onDirectionsChanged: PropTypes.func,
-  }
+  };
 
   static contextTypes = {
     [MAP]: PropTypes.object,
-  }
+  };
 
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#DirectionsRenderer
    */
   constructor(props, context) {
-    super(props, context)
-    const directionsRenderer = new google.maps.DirectionsRenderer()
+    super(props, context);
+    const directionsRenderer = new google.maps.DirectionsRenderer();
     construct(
       DirectionsRenderer.propTypes,
       updaterMap,
       this.props,
       directionsRenderer
-    )
-    directionsRenderer.setMap(this.context[MAP])
+    );
+    directionsRenderer.setMap(this.context[MAP]);
     this.state = {
       [DIRECTIONS_RENDERER]: directionsRenderer,
-    }
+    };
   }
 
   componentDidMount() {
-    componentDidMount(this, this.state[DIRECTIONS_RENDERER], eventMap)
+    componentDidMount(this, this.state[DIRECTIONS_RENDERER], eventMap);
   }
 
   componentDidUpdate(prevProps) {
@@ -103,19 +103,19 @@ export class DirectionsRenderer extends React.PureComponent {
       eventMap,
       updaterMap,
       prevProps
-    )
+    );
   }
 
   componentWillUnmount() {
-    componentWillUnmount(this)
-    const directionsRenderer = this.state[DIRECTIONS_RENDERER]
+    componentWillUnmount(this);
+    const directionsRenderer = this.state[DIRECTIONS_RENDERER];
     if (directionsRenderer) {
-      directionsRenderer.setMap(null)
+      directionsRenderer.setMap(null);
     }
   }
 
   render() {
-    return false
+    return false;
   }
 
   /**
@@ -124,7 +124,7 @@ export class DirectionsRenderer extends React.PureComponent {
    * @public
    */
   getDirections() {
-    return this.state[DIRECTIONS_RENDERER].getDirections()
+    return this.state[DIRECTIONS_RENDERER].getDirections();
   }
 
   /**
@@ -133,7 +133,7 @@ export class DirectionsRenderer extends React.PureComponent {
    * @public
    */
   getPanel() {
-    return this.state[DIRECTIONS_RENDERER].getPanel()
+    return this.state[DIRECTIONS_RENDERER].getPanel();
   }
 
   /**
@@ -142,30 +142,30 @@ export class DirectionsRenderer extends React.PureComponent {
    * @public
    */
   getRouteIndex() {
-    return this.state[DIRECTIONS_RENDERER].getRouteIndex()
+    return this.state[DIRECTIONS_RENDERER].getRouteIndex();
   }
 }
 
-export default DirectionsRenderer
+export default DirectionsRenderer;
 
 const eventMap = {
-  onDirectionsChanged: "directions_changed",
-}
+  onDirectionsChanged: 'directions_changed',
+};
 
 const updaterMap = {
   directions(instance, directions) {
-    instance.setDirections(directions)
+    instance.setDirections(directions);
   },
 
   options(instance, options) {
-    instance.setOptions(options)
+    instance.setOptions(options);
   },
 
   panel(instance, panel) {
-    instance.setPanel(panel)
+    instance.setPanel(panel);
   },
 
   routeIndex(instance, routeIndex) {
-    instance.setRouteIndex(routeIndex)
+    instance.setRouteIndex(routeIndex);
   },
-}
+};

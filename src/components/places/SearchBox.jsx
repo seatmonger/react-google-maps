@@ -5,28 +5,28 @@
  * -----------------------------------------------------------------------------
  */
 /* global google */
-import _ from "lodash"
-import invariant from "invariant"
-import canUseDOM from "can-use-dom"
-import React from "react"
-import ReactDOM from "react-dom"
-import PropTypes from "prop-types"
+import _ from 'lodash';
+import invariant from 'invariant';
+import canUseDOM from 'can-use-dom';
+import { version, Children, PureComponent } from 'react';
+import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 
 import {
   construct,
   componentDidMount,
   componentDidUpdate,
   componentWillUnmount,
-} from "../../utils/MapChildHelper"
+} from '../../utils/MapChildHelper';
 
-import { MAP, SEARCH_BOX } from "../../constants"
+import { MAP, SEARCH_BOX } from '../../constants';
 
 /**
  * A wrapper around `google.maps.places.SearchBox` on the map
  *
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#SearchBox
  */
-export class SearchBox extends React.PureComponent {
+export class SearchBox extends PureComponent {
   static propTypes = {
     /**
      * Where to put `<SearchBox>` inside a `<GoogleMap>`
@@ -50,44 +50,44 @@ export class SearchBox extends React.PureComponent {
      * function
      */
     onPlacesChanged: PropTypes.func,
-  }
+  };
 
   static contextTypes = {
     [MAP]: PropTypes.object,
-  }
+  };
 
   state = {
     [SEARCH_BOX]: null,
-  }
+  };
 
   componentWillMount() {
     if (!canUseDOM || this.containerElement) {
-      return
+      return;
     }
     invariant(
       google.maps.places,
       `Did you include "libraries=places" in the URL?`
-    )
-    this.containerElement = document.createElement(`div`)
-    this.handleRenderChildToContainerElement()
-    if (React.version.match(/^16/)) {
-      return
+    );
+    this.containerElement = document.createElement(`div`);
+    this.handleRenderChildToContainerElement();
+    if (version.match(/^16/)) {
+      return;
     }
-    this.handleInitializeSearchBox()
+    this.handleInitializeSearchBox();
   }
 
   componentDidMount() {
-    let searchBox = this.state[SEARCH_BOX]
-    if (React.version.match(/^16/)) {
-      searchBox = this.handleInitializeSearchBox()
+    let searchBox = this.state[SEARCH_BOX];
+    if (version.match(/^16/)) {
+      searchBox = this.handleInitializeSearchBox();
     }
-    componentDidMount(this, searchBox, eventMap)
-    this.handleMountAtControlPosition()
+    componentDidMount(this, searchBox, eventMap);
+    this.handleMountAtControlPosition();
   }
 
   componentWillUpdate(nextProp) {
     if (this.props.controlPosition !== nextProp.controlPosition) {
-      this.handleUnmountAtControlPosition()
+      this.handleUnmountAtControlPosition();
     }
   }
 
@@ -98,24 +98,24 @@ export class SearchBox extends React.PureComponent {
       eventMap,
       updaterMap,
       prevProps
-    )
+    );
     if (this.props.children !== prevProps.children) {
-      this.handleRenderChildToContainerElement()
+      this.handleRenderChildToContainerElement();
     }
     if (this.props.controlPosition !== prevProps.controlPosition) {
-      this.handleMountAtControlPosition()
+      this.handleMountAtControlPosition();
     }
   }
 
   componentWillUnmount() {
-    componentWillUnmount(this)
-    this.handleUnmountAtControlPosition()
-    if (React.version.match(/^16/)) {
-      return
+    componentWillUnmount(this);
+    this.handleUnmountAtControlPosition();
+    if (version.match(/^16/)) {
+      return;
     }
     if (this.containerElement) {
-      ReactDOM.unmountComponentAtNode(this.containerElement)
-      this.containerElement = null
+      ReactDOM.unmountComponentAtNode(this.containerElement);
+      this.containerElement = null;
     }
   }
 
@@ -124,24 +124,24 @@ export class SearchBox extends React.PureComponent {
      * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#SearchBox
      */
     const searchBox = new google.maps.places.SearchBox(
-      this.containerElement.querySelector("input")
-    )
-    construct(SearchBox.propTypes, updaterMap, this.props, searchBox)
+      this.containerElement.querySelector('input')
+    );
+    construct(SearchBox.propTypes, updaterMap, this.props, searchBox);
     this.setState({
       [SEARCH_BOX]: searchBox,
-    })
-    return searchBox
+    });
+    return searchBox;
   }
 
   handleRenderChildToContainerElement() {
-    if (React.version.match(/^16/)) {
-      return
+    if (version.match(/^16/)) {
+      return;
     }
     ReactDOM.unstable_renderSubtreeIntoContainer(
       this,
-      React.Children.only(this.props.children),
+      Children.only(this.props.children),
       this.containerElement
-    )
+    );
   }
 
   handleMountAtControlPosition() {
@@ -150,7 +150,7 @@ export class SearchBox extends React.PureComponent {
         -1 +
         this.context[MAP].controls[this.props.controlPosition].push(
           this.containerElement.firstChild
-        )
+        );
     }
   }
 
@@ -158,21 +158,21 @@ export class SearchBox extends React.PureComponent {
     if (isValidControlPosition(this.props.controlPosition)) {
       const child = this.context[MAP].controls[
         this.props.controlPosition
-      ].removeAt(this.mountControlIndex)
+      ].removeAt(this.mountControlIndex);
       if (child !== undefined) {
-        this.containerElement.appendChild(child)
+        this.containerElement.appendChild(child);
       }
     }
   }
 
   render() {
-    if (React.version.match(/^16/)) {
+    if (version.match(/^16/)) {
       return ReactDOM.createPortal(
-        React.Children.only(this.props.children),
+        Children.only(this.props.children),
         this.containerElement
-      )
+      );
     }
-    return false
+    return false;
   }
 
   /**
@@ -181,7 +181,7 @@ export class SearchBox extends React.PureComponent {
    * @public
    */
   getBounds() {
-    return this.state[SEARCH_BOX].getBounds()
+    return this.state[SEARCH_BOX].getBounds();
   }
 
   /**
@@ -190,20 +190,20 @@ export class SearchBox extends React.PureComponent {
    * @public
    */
   getPlaces() {
-    return this.state[SEARCH_BOX].getPlaces()
+    return this.state[SEARCH_BOX].getPlaces();
   }
 }
 
-export default SearchBox
+export default SearchBox;
 
-const isValidControlPosition = _.isNumber
+const isValidControlPosition = _.isNumber;
 
 const eventMap = {
-  onPlacesChanged: "places_changed",
-}
+  onPlacesChanged: 'places_changed',
+};
 
 const updaterMap = {
   bounds(instance, bounds) {
-    instance.setBounds(bounds)
+    instance.setBounds(bounds);
   },
-}
+};

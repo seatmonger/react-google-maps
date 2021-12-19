@@ -1,15 +1,15 @@
 /* global google */
-import React from "react"
-import PropTypes from "prop-types"
+import { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import {
   construct,
   componentDidMount,
   componentDidUpdate,
   componentWillUnmount,
-} from "../utils/MapChildHelper"
+} from '../utils/MapChildHelper';
 
-import { MAP, CIRCLE } from "../constants"
+import { MAP, CIRCLE } from '../constants';
 
 export const __jscodeshiftPlaceholder__ = `{
   "eventMapOverrides": {
@@ -24,37 +24,37 @@ export const __jscodeshiftPlaceholder__ = `{
     "onRightClick": "rightclick"
   },
   "getInstanceFromComponent": "this.state[CIRCLE]"
-}`
+}`;
 
 /**
  * A wrapper around `google.maps.Circle`
  *
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Circle
  */
-export class Circle extends React.PureComponent {
+export class Circle extends PureComponent {
   static propTypes = {
     __jscodeshiftPlaceholder__: null,
-  }
+  };
 
   static contextTypes = {
     [MAP]: PropTypes.object,
-  }
+  };
 
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Circle
    */
   constructor(props, context) {
-    super(props, context)
-    const circle = new google.maps.Circle()
-    construct(Circle.propTypes, updaterMap, this.props, circle)
-    circle.setMap(this.context[MAP])
+    super(props, context);
+    const circle = new google.maps.Circle();
+    construct(Circle.propTypes, updaterMap, this.props, circle);
+    circle.setMap(this.context[MAP]);
     this.state = {
       [CIRCLE]: circle,
-    }
+    };
   }
 
   componentDidMount() {
-    componentDidMount(this, this.state[CIRCLE], eventMap)
+    componentDidMount(this, this.state[CIRCLE], eventMap);
   }
 
   componentDidUpdate(prevProps) {
@@ -64,24 +64,24 @@ export class Circle extends React.PureComponent {
       eventMap,
       updaterMap,
       prevProps
-    )
+    );
   }
 
   componentWillUnmount() {
-    componentWillUnmount(this)
-    const circle = this.state[CIRCLE]
+    componentWillUnmount(this);
+    const circle = this.state[CIRCLE];
     if (circle) {
-      circle.setMap(null)
+      circle.setMap(null);
     }
   }
 
   render() {
-    return false
+    return false;
   }
 }
 
-export default Circle
+export default Circle;
 
-const eventMap = {}
+const eventMap = {};
 
-const updaterMap = {}
+const updaterMap = {};

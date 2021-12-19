@@ -5,24 +5,24 @@
  * -----------------------------------------------------------------------------
  */
 /* global google */
-import React from "react"
-import PropTypes from "prop-types"
+import { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import {
   construct,
   componentDidMount,
   componentDidUpdate,
   componentWillUnmount,
-} from "../utils/MapChildHelper"
+} from '../utils/MapChildHelper';
 
-import { MAP, POLYLINE } from "../constants"
+import { MAP, POLYLINE } from '../constants';
 
 /**
  * A wrapper around `google.maps.Polyline`
  *
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Polyline
  */
-export class Polyline extends React.PureComponent {
+export class Polyline extends PureComponent {
   static propTypes = {
     /**
      * @type boolean
@@ -128,27 +128,27 @@ export class Polyline extends React.PureComponent {
      * function
      */
     onDrag: PropTypes.func,
-  }
+  };
 
   static contextTypes = {
     [MAP]: PropTypes.object,
-  }
+  };
 
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Polyline
    */
   constructor(props, context) {
-    super(props, context)
-    const polyline = new google.maps.Polyline()
-    construct(Polyline.propTypes, updaterMap, this.props, polyline)
-    polyline.setMap(this.context[MAP])
+    super(props, context);
+    const polyline = new google.maps.Polyline();
+    construct(Polyline.propTypes, updaterMap, this.props, polyline);
+    polyline.setMap(this.context[MAP]);
     this.state = {
       [POLYLINE]: polyline,
-    }
+    };
   }
 
   componentDidMount() {
-    componentDidMount(this, this.state[POLYLINE], eventMap)
+    componentDidMount(this, this.state[POLYLINE], eventMap);
   }
 
   componentDidUpdate(prevProps) {
@@ -158,19 +158,19 @@ export class Polyline extends React.PureComponent {
       eventMap,
       updaterMap,
       prevProps
-    )
+    );
   }
 
   componentWillUnmount() {
-    componentWillUnmount(this)
-    const polyline = this.state[POLYLINE]
+    componentWillUnmount(this);
+    const polyline = this.state[POLYLINE];
     if (polyline) {
-      polyline.setMap(null)
+      polyline.setMap(null);
     }
   }
 
   render() {
-    return false
+    return false;
   }
 
   /**
@@ -179,7 +179,7 @@ export class Polyline extends React.PureComponent {
    * @public
    */
   getDraggable() {
-    return this.state[POLYLINE].getDraggable()
+    return this.state[POLYLINE].getDraggable();
   }
 
   /**
@@ -188,7 +188,7 @@ export class Polyline extends React.PureComponent {
    * @public
    */
   getEditable() {
-    return this.state[POLYLINE].getEditable()
+    return this.state[POLYLINE].getEditable();
   }
 
   /**
@@ -197,7 +197,7 @@ export class Polyline extends React.PureComponent {
    * @public
    */
   getPath() {
-    return this.state[POLYLINE].getPath()
+    return this.state[POLYLINE].getPath();
   }
 
   /**
@@ -206,44 +206,44 @@ export class Polyline extends React.PureComponent {
    * @public
    */
   getVisible() {
-    return this.state[POLYLINE].getVisible()
+    return this.state[POLYLINE].getVisible();
   }
 }
 
-export default Polyline
+export default Polyline;
 
 const eventMap = {
-  onDblClick: "dblclick",
-  onDragEnd: "dragend",
-  onDragStart: "dragstart",
-  onMouseDown: "mousedown",
-  onMouseMove: "mousemove",
-  onMouseOut: "mouseout",
-  onMouseOver: "mouseover",
-  onMouseUp: "mouseup",
-  onRightClick: "rightclick",
-  onClick: "click",
-  onDrag: "drag",
-}
+  onDblClick: 'dblclick',
+  onDragEnd: 'dragend',
+  onDragStart: 'dragstart',
+  onMouseDown: 'mousedown',
+  onMouseMove: 'mousemove',
+  onMouseOut: 'mouseout',
+  onMouseOver: 'mouseover',
+  onMouseUp: 'mouseup',
+  onRightClick: 'rightclick',
+  onClick: 'click',
+  onDrag: 'drag',
+};
 
 const updaterMap = {
   draggable(instance, draggable) {
-    instance.setDraggable(draggable)
+    instance.setDraggable(draggable);
   },
 
   editable(instance, editable) {
-    instance.setEditable(editable)
+    instance.setEditable(editable);
   },
 
   options(instance, options) {
-    instance.setOptions(options)
+    instance.setOptions(options);
   },
 
   path(instance, path) {
-    instance.setPath(path)
+    instance.setPath(path);
   },
 
   visible(instance, visible) {
-    instance.setVisible(visible)
+    instance.setVisible(visible);
   },
-}
+};

@@ -5,24 +5,24 @@
  * -----------------------------------------------------------------------------
  */
 /* global google */
-import React from "react"
-import PropTypes from "prop-types"
+import { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import {
   construct,
   componentDidMount,
   componentDidUpdate,
   componentWillUnmount,
-} from "../utils/MapChildHelper"
+} from '../utils/MapChildHelper';
 
-import { MAP, KML_LAYER } from "../constants"
+import { MAP, KML_LAYER } from '../constants';
 
 /**
  * A wrapper around `google.maps.KmlLayer`
  *
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#KmlLayer
  */
-export class KmlLayer extends React.PureComponent {
+export class KmlLayer extends PureComponent {
   static propTypes = {
     /**
      * @type KmlLayerOptions
@@ -68,27 +68,27 @@ export class KmlLayer extends React.PureComponent {
      * function
      */
     onStatusChanged: PropTypes.func,
-  }
+  };
 
   static contextTypes = {
     [MAP]: PropTypes.object,
-  }
+  };
 
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#KmlLayer
    */
   constructor(props, context) {
-    super(props, context)
-    const kmlLayer = new google.maps.KmlLayer()
-    construct(KmlLayer.propTypes, updaterMap, this.props, kmlLayer)
-    kmlLayer.setMap(this.context[MAP])
+    super(props, context);
+    const kmlLayer = new google.maps.KmlLayer();
+    construct(KmlLayer.propTypes, updaterMap, this.props, kmlLayer);
+    kmlLayer.setMap(this.context[MAP]);
     this.state = {
       [KML_LAYER]: kmlLayer,
-    }
+    };
   }
 
   componentDidMount() {
-    componentDidMount(this, this.state[KML_LAYER], eventMap)
+    componentDidMount(this, this.state[KML_LAYER], eventMap);
   }
 
   componentDidUpdate(prevProps) {
@@ -98,19 +98,19 @@ export class KmlLayer extends React.PureComponent {
       eventMap,
       updaterMap,
       prevProps
-    )
+    );
   }
 
   componentWillUnmount() {
-    componentWillUnmount(this)
-    const kmlLayer = this.state[KML_LAYER]
+    componentWillUnmount(this);
+    const kmlLayer = this.state[KML_LAYER];
     if (kmlLayer) {
-      kmlLayer.setMap(null)
+      kmlLayer.setMap(null);
     }
   }
 
   render() {
-    return false
+    return false;
   }
 
   /**
@@ -119,7 +119,7 @@ export class KmlLayer extends React.PureComponent {
    * @public
    */
   getDefaultViewport() {
-    return this.state[KML_LAYER].getDefaultViewport()
+    return this.state[KML_LAYER].getDefaultViewport();
   }
 
   /**
@@ -128,7 +128,7 @@ export class KmlLayer extends React.PureComponent {
    * @public
    */
   getMetadata() {
-    return this.state[KML_LAYER].getMetadata()
+    return this.state[KML_LAYER].getMetadata();
   }
 
   /**
@@ -137,7 +137,7 @@ export class KmlLayer extends React.PureComponent {
    * @public
    */
   getStatus() {
-    return this.state[KML_LAYER].getStatus()
+    return this.state[KML_LAYER].getStatus();
   }
 
   /**
@@ -146,7 +146,7 @@ export class KmlLayer extends React.PureComponent {
    * @public
    */
   getUrl() {
-    return this.state[KML_LAYER].getUrl()
+    return this.state[KML_LAYER].getUrl();
   }
 
   /**
@@ -155,28 +155,28 @@ export class KmlLayer extends React.PureComponent {
    * @public
    */
   getZIndex() {
-    return this.state[KML_LAYER].getZIndex()
+    return this.state[KML_LAYER].getZIndex();
   }
 }
 
-export default KmlLayer
+export default KmlLayer;
 
 const eventMap = {
-  onDefaultViewportChanged: "defaultviewport_changed",
-  onClick: "click",
-  onStatusChanged: "status_changed",
-}
+  onDefaultViewportChanged: 'defaultviewport_changed',
+  onClick: 'click',
+  onStatusChanged: 'status_changed',
+};
 
 const updaterMap = {
   options(instance, options) {
-    instance.setOptions(options)
+    instance.setOptions(options);
   },
 
   url(instance, url) {
-    instance.setUrl(url)
+    instance.setUrl(url);
   },
 
   zIndex(instance, zIndex) {
-    instance.setZIndex(zIndex)
+    instance.setZIndex(zIndex);
   },
-}
+};
