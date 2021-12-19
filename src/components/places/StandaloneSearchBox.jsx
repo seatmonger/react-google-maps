@@ -82,10 +82,6 @@ class SearchBox extends PureComponent {
     componentWillUnmount(this);
   }
 
-  render() {
-    return Children.only(this.props.children);
-  }
-
   /**
    * Returns the bounds to which query predictions are biased.
    * @type LatLngBounds
@@ -102,6 +98,10 @@ class SearchBox extends PureComponent {
    */
   getPlaces() {
     return this.state[SEARCH_BOX].getPlaces();
+  }
+
+  render() {
+    return Children.only(this.props.children);
   }
 }
 

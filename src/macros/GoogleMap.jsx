@@ -32,6 +32,10 @@ export const __jscodeshiftPlaceholder__ = `{
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map
  */
 export class Map extends PureComponent {
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+  };
+
   static displayName = 'GoogleMap';
 
   static propTypes = {
@@ -44,9 +48,35 @@ export class Map extends PureComponent {
     defaultExtraMapTypes: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.any)),
   };
 
-  static contextTypes = {
-    [MAP]: PropTypes.object,
-  };
+  /*
+   * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map
+   */
+  constructor(props, context) {
+    super(props, context);
+    invariant(
+      !!this.context[MAP],
+      `Did you wrap <GoogleMap> component with withGoogleMap() HOC?`
+    );
+    construct(GoogleMap.propTypes, updaterMap, this.props, this.context[MAP]);
+  }
+
+  componentDidMount() {
+    componentDidMount(this, this.context[MAP], eventMap);
+  }
+
+  componentDidUpdate(prevProps) {
+    componentDidUpdate(
+      this,
+      this.context[MAP],
+      eventMap,
+      updaterMap,
+      prevProps
+    );
+  }
+
+  componentWillUnmount() {
+    componentWillUnmount(this);
+  }
 
   /**
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map
@@ -78,36 +108,6 @@ export class Map extends PureComponent {
    */
   panToBounds(...args) {
     return this.context[MAP].panToBounds(...args);
-  }
-
-  /*
-   * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map
-   */
-  constructor(props, context) {
-    super(props, context);
-    invariant(
-      !!this.context[MAP],
-      `Did you wrap <GoogleMap> component with withGoogleMap() HOC?`
-    );
-    construct(GoogleMap.propTypes, updaterMap, this.props, this.context[MAP]);
-  }
-
-  componentDidMount() {
-    componentDidMount(this, this.context[MAP], eventMap);
-  }
-
-  componentDidUpdate(prevProps) {
-    componentDidUpdate(
-      this,
-      this.context[MAP],
-      eventMap,
-      updaterMap,
-      prevProps
-    );
-  }
-
-  componentWillUnmount() {
-    componentWillUnmount(this);
   }
 
   render() {

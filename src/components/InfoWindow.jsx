@@ -26,6 +26,11 @@ import { MAP, ANCHOR, INFO_WINDOW } from '../constants';
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#InfoWindow
  */
 export class InfoWindow extends PureComponent {
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+    [ANCHOR]: PropTypes.object,
+  };
+
   static propTypes = {
     /**
      * @type InfoWindowOptions
@@ -81,11 +86,6 @@ export class InfoWindow extends PureComponent {
      * function
      */
     onZindexChanged: PropTypes.func,
-  };
-
-  static contextTypes = {
-    [MAP]: PropTypes.object,
-    [ANCHOR]: PropTypes.object,
   };
 
   /*
@@ -158,16 +158,6 @@ export class InfoWindow extends PureComponent {
     }
   }
 
-  render() {
-    if (version.match(/^16/)) {
-      return ReactDOM.createPortal(
-        Children.only(this.props.children),
-        this.containerElement
-      );
-    }
-    return false;
-  }
-
   /**
    *
    * @type LatLng
@@ -184,6 +174,16 @@ export class InfoWindow extends PureComponent {
    */
   getZIndex() {
     return this.state[INFO_WINDOW].getZIndex();
+  }
+
+  render() {
+    if (version.match(/^16/)) {
+      return ReactDOM.createPortal(
+        Children.only(this.props.children),
+        this.containerElement
+      );
+    }
+    return false;
   }
 }
 

@@ -27,6 +27,10 @@ import { MAP, SEARCH_BOX } from '../../constants';
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#SearchBox
  */
 export class SearchBox extends PureComponent {
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+  };
+
   static propTypes = {
     /**
      * Where to put `<SearchBox>` inside a `<GoogleMap>`
@@ -50,10 +54,6 @@ export class SearchBox extends PureComponent {
      * function
      */
     onPlacesChanged: PropTypes.func,
-  };
-
-  static contextTypes = {
-    [MAP]: PropTypes.object,
   };
 
   state = {
@@ -119,6 +119,24 @@ export class SearchBox extends PureComponent {
     }
   }
 
+  /**
+   * Returns the bounds to which query predictions are biased.
+   * @type LatLngBounds
+   * @public
+   */
+  getBounds() {
+    return this.state[SEARCH_BOX].getBounds();
+  }
+
+  /**
+   * Returns the query selected by the user, or `null` if no places have been found yet, to be used with `places_changed` event.
+   * @type Array<PlaceResult>
+   * @public
+   */
+  getPlaces() {
+    return this.state[SEARCH_BOX].getPlaces();
+  }
+
   handleInitializeSearchBox() {
     /*
      * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#SearchBox
@@ -133,6 +151,16 @@ export class SearchBox extends PureComponent {
     return searchBox;
   }
 
+  handleMountAtControlPosition() {
+    if (isValidControlPosition(this.props.controlPosition)) {
+      this.mountControlIndex =
+        -1 +
+        this.context[MAP].controls[this.props.controlPosition].push(
+          this.containerElement.firstChild
+        );
+    }
+  }
+
   handleRenderChildToContainerElement() {
     if (version.match(/^16/)) {
       return;
@@ -142,16 +170,6 @@ export class SearchBox extends PureComponent {
       Children.only(this.props.children),
       this.containerElement
     );
-  }
-
-  handleMountAtControlPosition() {
-    if (isValidControlPosition(this.props.controlPosition)) {
-      this.mountControlIndex =
-        -1 +
-        this.context[MAP].controls[this.props.controlPosition].push(
-          this.containerElement.firstChild
-        );
-    }
   }
 
   handleUnmountAtControlPosition() {
@@ -173,24 +191,6 @@ export class SearchBox extends PureComponent {
       );
     }
     return false;
-  }
-
-  /**
-   * Returns the bounds to which query predictions are biased.
-   * @type LatLngBounds
-   * @public
-   */
-  getBounds() {
-    return this.state[SEARCH_BOX].getBounds();
-  }
-
-  /**
-   * Returns the query selected by the user, or `null` if no places have been found yet, to be used with `places_changed` event.
-   * @type Array<PlaceResult>
-   * @public
-   */
-  getPlaces() {
-    return this.state[SEARCH_BOX].getPlaces();
   }
 }
 

@@ -23,6 +23,10 @@ import { MAP, POLYLINE } from '../constants';
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Polyline
  */
 export class Polyline extends PureComponent {
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+  };
+
   static propTypes = {
     /**
      * @type boolean
@@ -130,10 +134,6 @@ export class Polyline extends PureComponent {
     onDrag: PropTypes.func,
   };
 
-  static contextTypes = {
-    [MAP]: PropTypes.object,
-  };
-
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Polyline
    */
@@ -167,10 +167,6 @@ export class Polyline extends PureComponent {
     if (polyline) {
       polyline.setMap(null);
     }
-  }
-
-  render() {
-    return false;
   }
 
   /**
@@ -207,6 +203,10 @@ export class Polyline extends PureComponent {
    */
   getVisible() {
     return this.state[POLYLINE].getVisible();
+  }
+
+  render() {
+    return false;
   }
 }
 

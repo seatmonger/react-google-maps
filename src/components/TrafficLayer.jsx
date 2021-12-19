@@ -23,6 +23,10 @@ import { MAP, TRAFFIC_LAYER } from '../constants';
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#TrafficLayer
  */
 export class TrafficLayer extends PureComponent {
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+  };
+
   static propTypes = {
     /**
      * @type TrafficLayerOptions
@@ -33,10 +37,6 @@ export class TrafficLayer extends PureComponent {
      * @type TrafficLayerOptions
      */
     options: PropTypes.any,
-  };
-
-  static contextTypes = {
-    [MAP]: PropTypes.object,
   };
 
   /*

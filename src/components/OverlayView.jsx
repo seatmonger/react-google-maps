@@ -33,6 +33,11 @@ export class OverlayView extends PureComponent {
   static OVERLAY_LAYER = `overlayLayer`;
   static OVERLAY_MOUSE_TARGET = `overlayMouseTarget`;
 
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+    [ANCHOR]: PropTypes.object,
+  };
+
   static propTypes = {
     /**
      * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#OverlayView
@@ -60,11 +65,6 @@ export class OverlayView extends PureComponent {
     getPixelPositionOffset: PropTypes.func,
   };
 
-  static contextTypes = {
-    [MAP]: PropTypes.object,
-    [ANCHOR]: PropTypes.object,
-  };
-
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#OverlayView
    */
@@ -82,53 +82,6 @@ export class OverlayView extends PureComponent {
     this.state = {
       [OVERLAY_VIEW]: overlayView,
     };
-  }
-
-  onAdd() {
-    this.containerElement = document.createElement(`div`);
-    this.containerElement.style.position = `absolute`;
-  }
-
-  draw() {
-    const { mapPaneName } = this.props;
-    invariant(
-      !!mapPaneName,
-      `OverlayView requires either props.mapPaneName or props.defaultMapPaneName but got %s`,
-      mapPaneName
-    );
-    // https://developers.google.com/maps/documentation/javascript/3.exp/reference#MapPanes
-    const mapPanes = this.state[OVERLAY_VIEW].getPanes();
-    mapPanes[mapPaneName].appendChild(this.containerElement);
-
-    ReactDOM.unstable_renderSubtreeIntoContainer(
-      this,
-      Children.only(this.props.children),
-      this.containerElement,
-      this.onPositionElement
-    );
-  }
-
-  onPositionElement() {
-    // https://developers.google.com/maps/documentation/javascript/3.exp/reference#MapCanvasProjection
-    const mapCanvasProjection = this.state[OVERLAY_VIEW].getProjection();
-
-    const offset = {
-      x: 0,
-      y: 0,
-      ...getOffsetOverride(this.containerElement, this.props),
-    };
-    const layoutStyles = getLayoutStyles(
-      mapCanvasProjection,
-      offset,
-      this.props
-    );
-    _.assign(this.containerElement.style, layoutStyles);
-  }
-
-  onRemove() {
-    this.containerElement.parentNode.removeChild(this.containerElement);
-    ReactDOM.unmountComponentAtNode(this.containerElement);
-    this.containerElement = null;
   }
 
   componentDidMount() {
@@ -158,8 +111,32 @@ export class OverlayView extends PureComponent {
     }
   }
 
-  render() {
-    return false;
+  onAdd() {
+    this.containerElement = document.createElement(`div`);
+    this.containerElement.style.position = `absolute`;
+  }
+
+  onPositionElement() {
+    // https://developers.google.com/maps/documentation/javascript/3.exp/reference#MapCanvasProjection
+    const mapCanvasProjection = this.state[OVERLAY_VIEW].getProjection();
+
+    const offset = {
+      x: 0,
+      y: 0,
+      ...getOffsetOverride(this.containerElement, this.props),
+    };
+    const layoutStyles = getLayoutStyles(
+      mapCanvasProjection,
+      offset,
+      this.props
+    );
+    _.assign(this.containerElement.style, layoutStyles);
+  }
+
+  onRemove() {
+    this.containerElement.parentNode.removeChild(this.containerElement);
+    ReactDOM.unmountComponentAtNode(this.containerElement);
+    this.containerElement = null;
   }
 
   /**
@@ -178,6 +155,29 @@ export class OverlayView extends PureComponent {
    */
   getProjection() {
     return this.state[OVERLAY_VIEW].getProjection();
+  }
+
+  draw() {
+    const { mapPaneName } = this.props;
+    invariant(
+      !!mapPaneName,
+      `OverlayView requires either props.mapPaneName or props.defaultMapPaneName but got %s`,
+      mapPaneName
+    );
+    // https://developers.google.com/maps/documentation/javascript/3.exp/reference#MapPanes
+    const mapPanes = this.state[OVERLAY_VIEW].getPanes();
+    mapPanes[mapPaneName].appendChild(this.containerElement);
+
+    ReactDOM.unstable_renderSubtreeIntoContainer(
+      this,
+      Children.only(this.props.children),
+      this.containerElement,
+      this.onPositionElement
+    );
+  }
+
+  render() {
+    return false;
   }
 }
 

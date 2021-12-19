@@ -23,6 +23,10 @@ import { MAP, DIRECTIONS_RENDERER } from '../constants';
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#DirectionsRenderer
  */
 export class DirectionsRenderer extends PureComponent {
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+  };
+
   static propTypes = {
     /**
      * @type DirectionsResult
@@ -70,10 +74,6 @@ export class DirectionsRenderer extends PureComponent {
     onDirectionsChanged: PropTypes.func,
   };
 
-  static contextTypes = {
-    [MAP]: PropTypes.object,
-  };
-
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#DirectionsRenderer
    */
@@ -114,10 +114,6 @@ export class DirectionsRenderer extends PureComponent {
     }
   }
 
-  render() {
-    return false;
-  }
-
   /**
    * Returns the renderer's current set of directions.
    * @type DirectionsResult
@@ -143,6 +139,10 @@ export class DirectionsRenderer extends PureComponent {
    */
   getRouteIndex() {
     return this.state[DIRECTIONS_RENDERER].getRouteIndex();
+  }
+
+  render() {
+    return false;
   }
 }
 

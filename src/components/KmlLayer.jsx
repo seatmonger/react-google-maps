@@ -23,6 +23,10 @@ import { MAP, KML_LAYER } from '../constants';
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#KmlLayer
  */
 export class KmlLayer extends PureComponent {
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+  };
+
   static propTypes = {
     /**
      * @type KmlLayerOptions
@@ -70,10 +74,6 @@ export class KmlLayer extends PureComponent {
     onStatusChanged: PropTypes.func,
   };
 
-  static contextTypes = {
-    [MAP]: PropTypes.object,
-  };
-
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#KmlLayer
    */
@@ -107,10 +107,6 @@ export class KmlLayer extends PureComponent {
     if (kmlLayer) {
       kmlLayer.setMap(null);
     }
-  }
-
-  render() {
-    return false;
   }
 
   /**
@@ -156,6 +152,10 @@ export class KmlLayer extends PureComponent {
    */
   getZIndex() {
     return this.state[KML_LAYER].getZIndex();
+  }
+
+  render() {
+    return false;
   }
 }
 

@@ -23,6 +23,10 @@ import { MAP, FUSION_TABLES_LAYER } from '../constants';
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#FusionTablesLayer
  */
 export class FusionTablesLayer extends PureComponent {
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+  };
+
   static propTypes = {
     /**
      * @type FusionTablesLayerOptions
@@ -38,10 +42,6 @@ export class FusionTablesLayer extends PureComponent {
      * function
      */
     onClick: PropTypes.func,
-  };
-
-  static contextTypes = {
-    [MAP]: PropTypes.object,
   };
 
   /*

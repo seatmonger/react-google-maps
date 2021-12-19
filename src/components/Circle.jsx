@@ -23,6 +23,10 @@ import { MAP, CIRCLE } from '../constants';
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Circle
  */
 export class Circle extends PureComponent {
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+  };
+
   static propTypes = {
     /**
      * @type LatLng|LatLngLiteral
@@ -150,10 +154,6 @@ export class Circle extends PureComponent {
     onRadiusChanged: PropTypes.func,
   };
 
-  static contextTypes = {
-    [MAP]: PropTypes.object,
-  };
-
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Circle
    */
@@ -187,10 +187,6 @@ export class Circle extends PureComponent {
     if (circle) {
       circle.setMap(null);
     }
-  }
-
-  render() {
-    return false;
   }
 
   /**
@@ -245,6 +241,10 @@ export class Circle extends PureComponent {
    */
   getVisible() {
     return this.state[CIRCLE].getVisible();
+  }
+
+  render() {
+    return false;
   }
 }
 

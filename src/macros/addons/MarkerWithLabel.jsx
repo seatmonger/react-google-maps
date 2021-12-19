@@ -34,6 +34,15 @@ export const __jscodeshiftPlaceholder__ = `{
  * @see https://cdn.rawgit.com/googlemaps/v3-utility-library/master/markerwithlabel/src/markerwithlabel.js
  */
 export class MarkerWithLabel extends PureComponent {
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+    [MARKER_CLUSTERER]: PropTypes.object,
+  };
+
+  static defaultProps = {
+    labelVisible: true,
+  };
+
   static propTypes = {
     __jscodeshiftPlaceholder__: null,
     /**
@@ -67,15 +76,6 @@ export class MarkerWithLabel extends PureComponent {
      * @see https://github.com/mikesaidani/marker-clusterer-plus
      */
     noRedraw: PropTypes.bool,
-  };
-
-  static defaultProps = {
-    labelVisible: true,
-  };
-
-  static contextTypes = {
-    [MAP]: PropTypes.object,
-    [MARKER_CLUSTERER]: PropTypes.object,
   };
 
   /*

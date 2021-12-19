@@ -24,6 +24,10 @@ import { MAP, GROUND_LAYER } from '../constants';
  * @see https://developers.google.com/maps/documentation/javascript/reference#GroundOverlay
  */
 export class GroundOverlay extends PureComponent {
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+  };
+
   static propTypes = {
     /**
      * @type string
@@ -66,10 +70,6 @@ export class GroundOverlay extends PureComponent {
      * function
      */
     onClick: PropTypes.func,
-  };
-
-  static contextTypes = {
-    [MAP]: PropTypes.object,
   };
 
   /*
@@ -125,10 +125,6 @@ For GroundOveray, url and bounds are passed in to constructor and are immutable
     }
   }
 
-  render() {
-    return false;
-  }
-
   /**
    * Gets the `LatLngBounds` of this overlay.
    * @type LatLngBoundsLatLngBounds
@@ -154,6 +150,10 @@ For GroundOveray, url and bounds are passed in to constructor and are immutable
    */
   getUrl() {
     return this.state[GROUND_LAYER].getUrl();
+  }
+
+  render() {
+    return false;
   }
 }
 

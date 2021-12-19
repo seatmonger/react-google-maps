@@ -27,6 +27,10 @@ export const __jscodeshiftPlaceholder__ = `{
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#SearchBox
  */
 export class SearchBox extends PureComponent {
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+  };
+
   static propTypes = {
     __jscodeshiftPlaceholder__: null,
     /**
@@ -36,10 +40,6 @@ export class SearchBox extends PureComponent {
      * @type number
      */
     controlPosition: PropTypes.number,
-  };
-
-  static contextTypes = {
-    [MAP]: PropTypes.object,
   };
 
   state = {
@@ -119,6 +119,16 @@ export class SearchBox extends PureComponent {
     return searchBox;
   }
 
+  handleMountAtControlPosition() {
+    if (isValidControlPosition(this.props.controlPosition)) {
+      this.mountControlIndex =
+        -1 +
+        this.context[MAP].controls[this.props.controlPosition].push(
+          this.containerElement.firstChild
+        );
+    }
+  }
+
   handleRenderChildToContainerElement() {
     if (version.match(/^16/)) {
       return;
@@ -128,16 +138,6 @@ export class SearchBox extends PureComponent {
       Children.only(this.props.children),
       this.containerElement
     );
-  }
-
-  handleMountAtControlPosition() {
-    if (isValidControlPosition(this.props.controlPosition)) {
-      this.mountControlIndex =
-        -1 +
-        this.context[MAP].controls[this.props.controlPosition].push(
-          this.containerElement.firstChild
-        );
-    }
   }
 
   handleUnmountAtControlPosition() {

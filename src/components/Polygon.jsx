@@ -23,6 +23,10 @@ import { MAP, POLYGON } from '../constants';
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Polygon
  */
 export class Polygon extends PureComponent {
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+  };
+
   static propTypes = {
     /**
      * @type boolean
@@ -140,10 +144,6 @@ export class Polygon extends PureComponent {
     onDrag: PropTypes.func,
   };
 
-  static contextTypes = {
-    [MAP]: PropTypes.object,
-  };
-
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Polygon
    */
@@ -177,10 +177,6 @@ export class Polygon extends PureComponent {
     if (polygon) {
       polygon.setMap(null);
     }
-  }
-
-  render() {
-    return false;
   }
 
   /**
@@ -226,6 +222,10 @@ export class Polygon extends PureComponent {
    */
   getVisible() {
     return this.state[POLYGON].getVisible();
+  }
+
+  render() {
+    return false;
   }
 }
 

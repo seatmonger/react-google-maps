@@ -23,6 +23,14 @@ import { MAP } from '../constants';
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#StreetViewPanorama
  */
 export class StreetViewPanorama extends PureComponent {
+  static childContextTypes = {
+    [MAP]: PropTypes.object,
+  };
+
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+  };
+
   static propTypes = {
     /**
      * @type Array<StreetViewLink>
@@ -145,14 +153,6 @@ export class StreetViewPanorama extends PureComponent {
     onZoomChanged: PropTypes.func,
   };
 
-  static contextTypes = {
-    [MAP]: PropTypes.object,
-  };
-
-  static childContextTypes = {
-    [MAP]: PropTypes.object,
-  };
-
   constructor(props, context) {
     super(props, context);
     invariant(
@@ -193,11 +193,6 @@ export class StreetViewPanorama extends PureComponent {
     if (streetViewPanorama) {
       streetViewPanorama.setVisible(false);
     }
-  }
-
-  render() {
-    const { children } = this.props;
-    return <div>{children}</div>;
   }
 
   /**
@@ -288,6 +283,11 @@ export class StreetViewPanorama extends PureComponent {
    */
   getZoom() {
     return this.context[MAP].getZoom();
+  }
+
+  render() {
+    const { children } = this.props;
+    return <div>{children}</div>;
   }
 }
 

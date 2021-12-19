@@ -23,11 +23,11 @@ import { MAP, BICYCLING_LAYER } from '../constants';
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#BicyclingLayer
  */
 export class BicyclingLayer extends PureComponent {
-  static propTypes = {};
-
   static contextTypes = {
     [MAP]: PropTypes.object,
   };
+
+  static propTypes = {};
 
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#BicyclingLayer

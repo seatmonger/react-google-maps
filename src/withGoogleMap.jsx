@@ -11,6 +11,10 @@ export function withGoogleMap(BaseComponent) {
   const factory = createFactory(BaseComponent);
 
   class Container extends PureComponent {
+    static childContextTypes = {
+      [MAP]: PropTypes.object,
+    };
+
     static displayName = `withGoogleMap(${getDisplayName(BaseComponent)})`;
 
     static propTypes = {
@@ -18,15 +22,9 @@ export function withGoogleMap(BaseComponent) {
       mapElement: PropTypes.node.isRequired,
     };
 
-    static childContextTypes = {
-      [MAP]: PropTypes.object,
-    };
-
     state = {
       map: null,
     };
-
-    handleComponentMount = _.bind(this.handleComponentMount, this);
 
     getChildContext() {
       return {
@@ -44,6 +42,8 @@ export function withGoogleMap(BaseComponent) {
  have height when initialized.`
       );
     }
+
+    handleComponentMount = _.bind(this.handleComponentMount, this);
 
     handleComponentMount(node) {
       if (this.state.map || node === null) {

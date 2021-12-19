@@ -25,6 +25,10 @@ export const __jscodeshiftPlaceholder__ = `{
  * @see https://developers.google.com/maps/documentation/javascript/reference#GroundOverlay
  */
 export class GroundOverlay extends PureComponent {
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+  };
+
   static propTypes = {
     __jscodeshiftPlaceholder__: null,
     /**
@@ -48,10 +52,6 @@ export class GroundOverlay extends PureComponent {
      * @deprecated use `defaultBounds` instead. It will be removed in v10.0.0
      */
     bounds: PropTypes.object,
-  };
-
-  static contextTypes = {
-    [MAP]: PropTypes.object,
   };
 
   /*

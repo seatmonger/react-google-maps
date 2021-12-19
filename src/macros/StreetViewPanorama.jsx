@@ -24,16 +24,16 @@ export const __jscodeshiftPlaceholder__ = `{
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#StreetViewPanorama
  */
 export class StreetViewPanorama extends PureComponent {
-  static propTypes = {
-    __jscodeshiftPlaceholder__: null,
+  static childContextTypes = {
+    [MAP]: PropTypes.object,
   };
 
   static contextTypes = {
     [MAP]: PropTypes.object,
   };
 
-  static childContextTypes = {
-    [MAP]: PropTypes.object,
+  static propTypes = {
+    __jscodeshiftPlaceholder__: null,
   };
 
   constructor(props, context) {

@@ -24,19 +24,6 @@ export function withScriptjs(BaseComponent) {
       loadingState: LOADING_STATE_NONE,
     };
 
-    isUnmounted = false;
-
-    handleLoaded = _.bind(this.handleLoaded, this);
-
-    handleLoaded() {
-      if (this.isUnmounted) {
-        return;
-      }
-      this.setState({
-        loadingState: LOADING_STATE_LOADED,
-      });
-    }
-
     UNSAFE_componentWillMount() {
       const { loadingElement, googleMapURL } = this.props;
       invariant(
@@ -63,6 +50,19 @@ export function withScriptjs(BaseComponent) {
     componentWillUnmount() {
       this.isUnmounted = true;
     }
+
+    handleLoaded = _.bind(this.handleLoaded, this);
+
+    handleLoaded() {
+      if (this.isUnmounted) {
+        return;
+      }
+      this.setState({
+        loadingState: LOADING_STATE_LOADED,
+      });
+    }
+
+    isUnmounted = false;
 
     render() {
       const {

@@ -24,6 +24,10 @@ import { MAP, DRAWING_MANAGER } from '../../constants';
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#DrawingManager
  */
 export class DrawingManager extends PureComponent {
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+  };
+
   static propTypes = {
     /**
      * @type OverlayType
@@ -76,10 +80,6 @@ export class DrawingManager extends PureComponent {
     onRectangleComplete: PropTypes.func,
   };
 
-  static contextTypes = {
-    [MAP]: PropTypes.object,
-  };
-
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#DrawingManager
    */
@@ -119,10 +119,6 @@ export class DrawingManager extends PureComponent {
     }
   }
 
-  render() {
-    return false;
-  }
-
   /**
    * Returns the `DrawingManager`'s drawing mode.
    * @type OverlayType|null
@@ -130,6 +126,10 @@ export class DrawingManager extends PureComponent {
    */
   getDrawingMode() {
     return this.state[DRAWING_MANAGER].getDrawingMode();
+  }
+
+  render() {
+    return false;
   }
 }
 

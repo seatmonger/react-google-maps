@@ -25,6 +25,15 @@ import { MAP, MARKER_CLUSTERER, MARKER_WITH_LABEL } from '../../constants';
  * @see https://cdn.rawgit.com/googlemaps/v3-utility-library/master/markerwithlabel/src/markerwithlabel.js
  */
 export class MarkerWithLabel extends PureComponent {
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+    [MARKER_CLUSTERER]: PropTypes.object,
+  };
+
+  static defaultProps = {
+    labelVisible: true,
+  };
+
   static propTypes = {
     /**
      * It will be `MarkerWithLabel#labelContent`.
@@ -304,15 +313,6 @@ export class MarkerWithLabel extends PureComponent {
     onZindexChanged: PropTypes.func,
   };
 
-  static defaultProps = {
-    labelVisible: true,
-  };
-
-  static contextTypes = {
-    [MAP]: PropTypes.object,
-    [MARKER_CLUSTERER]: PropTypes.object,
-  };
-
   /*
    * @see https://cdn.rawgit.com/googlemaps/v3-utility-library/master/markerwithlabel/src/markerwithlabel.js
    */
@@ -378,10 +378,6 @@ export class MarkerWithLabel extends PureComponent {
       }
       markerWithLabel.setMap(null);
     }
-  }
-
-  render() {
-    return false;
   }
 
   /**
@@ -490,6 +486,10 @@ export class MarkerWithLabel extends PureComponent {
    */
   getZIndex() {
     return this.state[MARKER_WITH_LABEL].getZIndex();
+  }
+
+  render() {
+    return false;
   }
 }
 

@@ -24,6 +24,10 @@ import { MAP, HEATMAP_LAYER } from '../../constants';
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#HeatmapLayer
  */
 export class HeatmapLayer extends PureComponent {
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+  };
+
   static propTypes = {
     /**
      * @type MVCArray<LatLng|WeightedLocation>|Array<LatLng|WeightedLocation>
@@ -44,10 +48,6 @@ export class HeatmapLayer extends PureComponent {
      * @type HeatmapLayerOptions
      */
     options: PropTypes.any,
-  };
-
-  static contextTypes = {
-    [MAP]: PropTypes.object,
   };
 
   /*
@@ -89,10 +89,6 @@ export class HeatmapLayer extends PureComponent {
     }
   }
 
-  render() {
-    return false;
-  }
-
   /**
    * Returns the data points currently displayed by this heatmap.
    * @type MVCArray<LatLng|WeightedLocation>
@@ -100,6 +96,10 @@ export class HeatmapLayer extends PureComponent {
    */
   getData() {
     return this.state[HEATMAP_LAYER].getData();
+  }
+
+  render() {
+    return false;
   }
 }
 

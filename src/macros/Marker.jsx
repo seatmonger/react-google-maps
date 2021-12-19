@@ -31,13 +31,8 @@ export const __jscodeshiftPlaceholder__ = `{
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Marker
  */
 export class Marker extends PureComponent {
-  static propTypes = {
-    __jscodeshiftPlaceholder__: null,
-    /**
-     * For the 2nd argument of `MarkerCluster#addMarker`
-     * @see https://github.com/mikesaidani/marker-clusterer-plus
-     */
-    noRedraw: PropTypes.bool,
+  static childContextTypes = {
+    [ANCHOR]: PropTypes.object,
   };
 
   static contextTypes = {
@@ -45,8 +40,13 @@ export class Marker extends PureComponent {
     [MARKER_CLUSTERER]: PropTypes.object,
   };
 
-  static childContextTypes = {
-    [ANCHOR]: PropTypes.object,
+  static propTypes = {
+    __jscodeshiftPlaceholder__: null,
+    /**
+     * For the 2nd argument of `MarkerCluster#addMarker`
+     * @see https://github.com/mikesaidani/marker-clusterer-plus
+     */
+    noRedraw: PropTypes.bool,
   };
 
   /*

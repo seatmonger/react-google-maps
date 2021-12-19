@@ -24,12 +24,12 @@ export const __jscodeshiftPlaceholder__ = `{
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#KmlLayer
  */
 export class KmlLayer extends PureComponent {
-  static propTypes = {
-    __jscodeshiftPlaceholder__: null,
-  };
-
   static contextTypes = {
     [MAP]: PropTypes.object,
+  };
+
+  static propTypes = {
+    __jscodeshiftPlaceholder__: null,
   };
 
   /*

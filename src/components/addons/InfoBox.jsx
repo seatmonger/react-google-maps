@@ -19,6 +19,11 @@ import { MAP, ANCHOR, INFO_BOX } from '../../constants';
  * @see http://htmlpreview.github.io/?https://github.com/googlemaps/v3-utility-library/blob/master/infobox/docs/reference.html
  */
 export class InfoBox extends PureComponent {
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+    [ANCHOR]: PropTypes.object,
+  };
+
   static propTypes = {
     /**
      * @type InfoBoxOptions
@@ -84,11 +89,6 @@ export class InfoBox extends PureComponent {
      * function
      */
     onZindexChanged: PropTypes.func,
-  };
-
-  static contextTypes = {
-    [MAP]: PropTypes.object,
-    [ANCHOR]: PropTypes.object,
   };
 
   state = {
@@ -157,10 +157,6 @@ export class InfoBox extends PureComponent {
     }
   }
 
-  render() {
-    return false;
-  }
-
   /**
    *
    * @type LatLng
@@ -183,6 +179,10 @@ export class InfoBox extends PureComponent {
    */
   getZIndex() {
     return this.state[INFO_BOX].getZIndex();
+  }
+
+  render() {
+    return false;
   }
 }
 

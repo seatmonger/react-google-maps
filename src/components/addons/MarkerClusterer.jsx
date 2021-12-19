@@ -17,6 +17,15 @@ import { MAP, ANCHOR, MARKER_CLUSTERER } from '../../constants';
  * @see https://github.com/mahnunchik/markerclustererplus/blob/master/docs/reference.html
  */
 export class MarkerClusterer extends PureComponent {
+  static childContextTypes = {
+    [ANCHOR]: PropTypes.object,
+    [MARKER_CLUSTERER]: PropTypes.object,
+  };
+
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+  };
+
   static propTypes = {
     /**
      * @type boolean
@@ -202,15 +211,6 @@ export class MarkerClusterer extends PureComponent {
      * function
      */
     onMouseOver: PropTypes.func,
-  };
-
-  static contextTypes = {
-    [MAP]: PropTypes.object,
-  };
-
-  static childContextTypes = {
-    [ANCHOR]: PropTypes.object,
-    [MARKER_CLUSTERER]: PropTypes.object,
   };
 
   /*

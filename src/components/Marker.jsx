@@ -23,6 +23,15 @@ import { MAP, MARKER, ANCHOR, MARKER_CLUSTERER } from '../constants';
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Marker
  */
 export class Marker extends PureComponent {
+  static childContextTypes = {
+    [ANCHOR]: PropTypes.object,
+  };
+
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+    [MARKER_CLUSTERER]: PropTypes.object,
+  };
+
   static propTypes = {
     /**
      * For the 2nd argument of `MarkerCluster#addMarker`
@@ -266,15 +275,6 @@ export class Marker extends PureComponent {
     onZindexChanged: PropTypes.func,
   };
 
-  static contextTypes = {
-    [MAP]: PropTypes.object,
-    [MARKER_CLUSTERER]: PropTypes.object,
-  };
-
-  static childContextTypes = {
-    [ANCHOR]: PropTypes.object,
-  };
-
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Marker
    */
@@ -323,11 +323,6 @@ export class Marker extends PureComponent {
       }
       marker.setMap(null);
     }
-  }
-
-  render() {
-    const { children } = this.props;
-    return <div>{children}</div>;
   }
 
   /**
@@ -436,6 +431,11 @@ export class Marker extends PureComponent {
    */
   getZIndex() {
     return this.state[MARKER].getZIndex();
+  }
+
+  render() {
+    const { children } = this.props;
+    return <div>{children}</div>;
   }
 }
 

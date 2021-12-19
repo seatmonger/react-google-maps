@@ -23,6 +23,10 @@ import { MAP } from '../constants';
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map
  */
 export class Map extends PureComponent {
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+  };
+
   static displayName = 'GoogleMap';
 
   static propTypes = {
@@ -208,42 +212,6 @@ export class Map extends PureComponent {
     onZoomChanged: PropTypes.func,
   };
 
-  static contextTypes = {
-    [MAP]: PropTypes.object,
-  };
-
-  /**
-   * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map
-   * @public
-   */
-  fitBounds(...args) {
-    return this.context[MAP].fitBounds(...args);
-  }
-
-  /**
-   * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map
-   * @public
-   */
-  panBy(...args) {
-    return this.context[MAP].panBy(...args);
-  }
-
-  /**
-   * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map
-   * @public
-   */
-  panTo(...args) {
-    return this.context[MAP].panTo(...args);
-  }
-
-  /**
-   * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map
-   * @public
-   */
-  panToBounds(...args) {
-    return this.context[MAP].panToBounds(...args);
-  }
-
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map
    */
@@ -272,11 +240,6 @@ export class Map extends PureComponent {
 
   componentWillUnmount() {
     componentWillUnmount(this);
-  }
-
-  render() {
-    const { children } = this.props;
-    return <div>{children}</div>;
   }
 
   /**
@@ -367,6 +330,43 @@ export class Map extends PureComponent {
    */
   getZoom() {
     return this.context[MAP].getZoom();
+  }
+
+  /**
+   * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map
+   * @public
+   */
+  fitBounds(...args) {
+    return this.context[MAP].fitBounds(...args);
+  }
+
+  /**
+   * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map
+   * @public
+   */
+  panBy(...args) {
+    return this.context[MAP].panBy(...args);
+  }
+
+  /**
+   * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map
+   * @public
+   */
+  panTo(...args) {
+    return this.context[MAP].panTo(...args);
+  }
+
+  /**
+   * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map
+   * @public
+   */
+  panToBounds(...args) {
+    return this.context[MAP].panToBounds(...args);
+  }
+
+  render() {
+    const { children } = this.props;
+    return <div>{children}</div>;
   }
 }
 

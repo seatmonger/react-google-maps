@@ -23,6 +23,10 @@ import { MAP, RECTANGLE } from '../constants';
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Rectangle
  */
 export class Rectangle extends PureComponent {
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+  };
+
   static propTypes = {
     /**
      * @type LatLngBounds|LatLngBoundsLiteral
@@ -135,10 +139,6 @@ export class Rectangle extends PureComponent {
     onDrag: PropTypes.func,
   };
 
-  static contextTypes = {
-    [MAP]: PropTypes.object,
-  };
-
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Rectangle
    */
@@ -172,10 +172,6 @@ export class Rectangle extends PureComponent {
     if (rectangle) {
       rectangle.setMap(null);
     }
-  }
-
-  render() {
-    return false;
   }
 
   /**
@@ -212,6 +208,10 @@ export class Rectangle extends PureComponent {
    */
   getVisible() {
     return this.state[RECTANGLE].getVisible();
+  }
+
+  render() {
+    return false;
   }
 }
 
