@@ -104,11 +104,6 @@ export class MarkerWithLabel extends PureComponent {
     defaultOptions: PropTypes.any,
 
     /**
-     * @type MarkerPlace
-     */
-    defaultPlace: PropTypes.any,
-
-    /**
      * @type LatLng|LatLngLiteral
      */
     defaultPosition: PropTypes.any,
@@ -172,11 +167,6 @@ export class MarkerWithLabel extends PureComponent {
      * @type MarkerOptions
      */
     options: PropTypes.any,
-
-    /**
-     * @type MarkerPlace
-     */
-    place: PropTypes.any,
 
     /**
      * @type LatLng|LatLngLiteral
@@ -257,6 +247,11 @@ export class MarkerWithLabel extends PureComponent {
      * function
      */
     onClickableChanged: PropTypes.func,
+
+    /**
+     * function
+     */
+    onContextmenu: PropTypes.func,
 
     /**
      * function
@@ -390,8 +385,8 @@ export class MarkerWithLabel extends PureComponent {
   }
 
   /**
-   *
-   * @type Animation
+   * Get the currently running animation.
+   * @type Animation|null|undefined
    * @public
    */
   getAnimation() {
@@ -399,7 +394,7 @@ export class MarkerWithLabel extends PureComponent {
   }
 
   /**
-   *
+   * Get the clickable status of the `[Marker](/maps/documentation/javascript/reference/marker#Marker)`.
    * @type boolean
    * @public
    */
@@ -408,8 +403,8 @@ export class MarkerWithLabel extends PureComponent {
   }
 
   /**
-   *
-   * @type string
+   * Get the mouse cursor type shown on hover.
+   * @type string|null|undefined
    * @public
    */
   getCursor() {
@@ -417,7 +412,7 @@ export class MarkerWithLabel extends PureComponent {
   }
 
   /**
-   *
+   * Get the draggable status of the `[Marker](/maps/documentation/javascript/reference/marker#Marker)`.
    * @type boolean
    * @public
    */
@@ -426,8 +421,8 @@ export class MarkerWithLabel extends PureComponent {
   }
 
   /**
-   *
-   * @type string|Icon|Symbol
+   * Get the icon of the `[Marker](/maps/documentation/javascript/reference/marker#Marker)`. See `[MarkerOptions.icon](/maps/documentation/javascript/reference/marker#MarkerOptions.icon)`.
+   * @type string|Icon|null|Symbol|undefined
    * @public
    */
   getIcon() {
@@ -435,8 +430,8 @@ export class MarkerWithLabel extends PureComponent {
   }
 
   /**
-   *
-   * @type MarkerLabel
+   * Get the label of the `[Marker](/maps/documentation/javascript/reference/marker#Marker)`. See `[MarkerOptions.label](/maps/documentation/javascript/reference/marker#MarkerOptions.label)`.
+   * @type MarkerLabel|null|undefined
    * @public
    */
   getLabel() {
@@ -444,8 +439,8 @@ export class MarkerWithLabel extends PureComponent {
   }
 
   /**
-   *
-   * @type number
+   * Get the opacity of the `[Marker](/maps/documentation/javascript/reference/marker#Marker)`.
+   * @type number|null|undefined
    * @public
    */
   getOpacity() {
@@ -453,17 +448,8 @@ export class MarkerWithLabel extends PureComponent {
   }
 
   /**
-   *
-   * @type MarkerPlace
-   * @public
-   */
-  getPlace() {
-    return this.state[MARKER_WITH_LABEL].getPlace();
-  }
-
-  /**
-   *
-   * @type LatLng
+   * Get the position of the `[Marker](/maps/documentation/javascript/reference/marker#Marker)`.
+   * @type LatLng|null|undefined
    * @public
    */
   getPosition() {
@@ -471,8 +457,8 @@ export class MarkerWithLabel extends PureComponent {
   }
 
   /**
-   *
-   * @type MarkerShape
+   * Get the shape of the `[Marker](/maps/documentation/javascript/reference/marker#Marker)` used for interaction. See `[MarkerOptions.shape](/maps/documentation/javascript/reference/marker#MarkerOptions.shape)` and `[MarkerShape](/maps/documentation/javascript/reference/marker#MarkerShape)`.
+   * @type MarkerShape|null|undefined
    * @public
    */
   getShape() {
@@ -480,8 +466,8 @@ export class MarkerWithLabel extends PureComponent {
   }
 
   /**
-   *
-   * @type string
+   * Get the title of the `[Marker](/maps/documentation/javascript/reference/marker#Marker)` tooltip. See `[MarkerOptions.title](/maps/documentation/javascript/reference/marker#MarkerOptions.title)`.
+   * @type string|null|undefined
    * @public
    */
   getTitle() {
@@ -489,7 +475,7 @@ export class MarkerWithLabel extends PureComponent {
   }
 
   /**
-   *
+   * Get the visibility of the `[Marker](/maps/documentation/javascript/reference/marker#Marker)`.
    * @type boolean
    * @public
    */
@@ -498,8 +484,8 @@ export class MarkerWithLabel extends PureComponent {
   }
 
   /**
-   *
-   * @type number
+   * Get the zIndex of the `[Marker](/maps/documentation/javascript/reference/marker#Marker)`. See `[MarkerOptions.zIndex](/maps/documentation/javascript/reference/marker#MarkerOptions.zIndex)`.
+   * @type number|null|undefined
    * @public
    */
   getZIndex() {
@@ -521,6 +507,7 @@ const eventMap = {
   onAnimationChanged: 'animation_changed',
   onClick: 'click',
   onClickableChanged: 'clickable_changed',
+  onContextmenu: 'contextmenu',
   onCursorChanged: 'cursor_changed',
   onDrag: 'drag',
   onDraggableChanged: 'draggable_changed',
@@ -596,10 +583,6 @@ const updaterMap = {
 
   options(instance, options) {
     instance.setOptions(options);
-  },
-
-  place(instance, place) {
-    instance.setPlace(place);
   },
 
   position(instance, position) {

@@ -35,7 +35,7 @@ export class DirectionsRenderer extends PureComponent {
     defaultOptions: PropTypes.any,
 
     /**
-     * @type Node
+     * @type HTMLElement
      */
     defaultPanel: PropTypes.any,
 
@@ -55,7 +55,7 @@ export class DirectionsRenderer extends PureComponent {
     options: PropTypes.any,
 
     /**
-     * @type Node
+     * @type HTMLElement
      */
     panel: PropTypes.any,
 
@@ -129,7 +129,7 @@ export class DirectionsRenderer extends PureComponent {
 
   /**
    * Returns the panel `<div>` in which the `DirectionsResult` is rendered.
-   * @type Node<div>DirectionsResult
+   * @type HTMLElement|null
    * @public
    */
   getPanel() {
@@ -138,7 +138,7 @@ export class DirectionsRenderer extends PureComponent {
 
   /**
    * Returns the current (zero-based) route index in use by this `DirectionsRenderer` object.
-   * @type numberDirectionsRenderer
+   * @type number
    * @public
    */
   getRouteIndex() {

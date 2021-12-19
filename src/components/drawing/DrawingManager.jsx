@@ -125,7 +125,7 @@ export class DrawingManager extends PureComponent {
 
   /**
    * Returns the `DrawingManager`'s drawing mode.
-   * @type OverlayTypeDrawingManager
+   * @type OverlayType|null
    * @public
    */
   getDrawingMode() {

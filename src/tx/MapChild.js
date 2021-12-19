@@ -1,41 +1,42 @@
-import path from "path"
-import { execSync } from "child_process"
-import _ from "lodash"
+import path from 'path';
+import { execSync } from 'child_process';
+import _ from 'lodash';
 
 function maybeTypeToPropType(maybeType) {
   switch (maybeType) {
-    case "boolean":
-      return "bool"
-    case "number":
-      return maybeType
-    case "string":
-      return maybeType
+    case 'boolean':
+      return 'bool';
+    case 'number':
+      return maybeType;
+    case 'string':
+      return maybeType;
     default:
-      return "any"
+      return 'any';
   }
 }
 
 export default function transformer(file, api) {
-  const j = api.jscodeshift
-  const wrap = j(file.source)
+  const j = api.jscodeshift;
+  const wrap = j(file.source);
 
-  const exportConfig = wrap.find(j.ExportNamedDeclaration).at(0)
-  const configString = exportConfig.find(j.TemplateElement).get().node.value.raw
+  const exportConfig = wrap.find(j.ExportNamedDeclaration).at(0);
+  const configString = exportConfig.find(j.TemplateElement).get().node.value
+    .raw;
   const {
     prohibitedPropNames = [],
     KlassNameOverrride,
     eventMapOverrides,
     getInstanceFromComponent,
-  } = JSON.parse(configString)
-  exportConfig.remove()
-  const eventNamesOverrides = _.values(eventMapOverrides)
+  } = JSON.parse(configString);
+  exportConfig.remove();
+  const eventNamesOverrides = _.values(eventMapOverrides);
 
   const KlassName =
     KlassNameOverrride ||
     wrap
       .find(j.ClassDeclaration)
       .at(0)
-      .get().node.id.name
+      .get().node.id.name;
 
   const result = execSync(
     `./node_modules/.bin/babel-node ${path.resolve(
@@ -43,27 +44,27 @@ export default function transformer(file, api) {
       `./ClassDefinition.js`
     )} "${KlassName}"`,
     {
-      encoding: "utf-8",
+      encoding: 'utf-8',
     }
-  )
-  const { constructor, methods, events } = JSON.parse(result)
+  );
+  const { constructor, methods, events } = JSON.parse(result);
   const methodAsProps = methods.filter(({ name }) => {
-    const matchResult = name.match(/^set(\S+)/)
+    const matchResult = name.match(/^set(\S+)/);
     return (
-      name !== "setMap" &&
+      name !== 'setMap' &&
       matchResult &&
       !_.includes(prohibitedPropNames, _.lowerFirst(matchResult[1]))
-    )
-  })
+    );
+  });
 
   const publicMethods = methods.filter(({ name }) => {
-    const matchResult = name.match(/^get(\S+)/)
+    const matchResult = name.match(/^get(\S+)/);
     return (
       !name.match(/Map$/) &&
       matchResult &&
       !_.includes(prohibitedPropNames, _.lowerFirst(matchResult[1]))
-    )
-  })
+    );
+  });
 
   wrap.find(j.Program).forEach(path => {
     j(path).replaceWith({
@@ -78,51 +79,51 @@ export default function transformer(file, api) {
         },
         ...path.node.body.slice(1),
       ],
-    })
-  })
+    });
+  });
 
   wrap.find(j.ClassBody).forEach(path => {
     j(path).replaceWith(
       Object.assign(path.node.__clone(), {
         body: [...path.node.body, ...txClassMethods()],
       })
-    )
-  })
+    );
+  });
 
   wrap.find(j.ObjectExpression).forEach(path => {
-    if (_.get(path, "parentPath.node.key.name") === "propTypes") {
+    if (_.get(path, 'parentPath.node.key.name') === 'propTypes') {
       j(path).replaceWith(
         Object.assign(path.node.__clone(), {
           properties: [
             ...path.node.properties.filter(
-              ({ key: { name } }) => name !== "__jscodeshiftPlaceholder__"
+              ({ key: { name } }) => name !== '__jscodeshiftPlaceholder__'
             ),
             ...txPropTypes(),
           ],
         })
-      )
-    } else if (_.get(path, "parentPath.node.id.name") === "eventMap") {
+      );
+    } else if (_.get(path, 'parentPath.node.id.name') === 'eventMap') {
       j(path).replaceWith(
         Object.assign(path.node.__clone(), {
           properties: [...path.node.properties, ...eventMap()],
         })
-      )
-    } else if (_.get(path, "parentPath.node.id.name") === "updaterMap") {
+      );
+    } else if (_.get(path, 'parentPath.node.id.name') === 'updaterMap') {
       j(path).replaceWith(
         Object.assign(path.node.__clone(), {
           properties: [...path.node.properties, ...updaterMap()],
         })
-      )
+      );
     }
-  })
+  });
 
-  return wrap.toSource()
+  return wrap.toSource();
 
   function txPropTypes() {
     return [
       ...methodAsProps.map(({ name, args, desc }) => {
-        const [, prop] = name.match(/^set(\S+)/)
-        const [, maybeType] = args.match(/\S+:(\S+)/)
+        const [, prop] = name.match(/^set(\S+)/);
+        const [, maybeType] = args.match(/\S+:\s*(\S+)/);
 
         return Object.assign(
           j.objectProperty(
@@ -132,11 +133,11 @@ export default function transformer(file, api) {
           {
             comments: [j.commentBlock(`*\n * @type ${maybeType}\n `, true)],
           }
-        )
+        );
       }),
       ...methodAsProps.map(({ name, args, desc }) => {
-        const [, prop] = name.match(/^set(\S+)/)
-        const [, maybeType] = args.match(/\S+:(\S+)/)
+        const [, prop] = name.match(/^set(\S+)/);
+        const [, maybeType] = args.match(/\S+:\s*(\S+)/);
 
         return Object.assign(
           j.objectProperty(
@@ -146,7 +147,7 @@ export default function transformer(file, api) {
           {
             comments: [j.commentBlock(`*\n * @type ${maybeType}\n `, true)],
           }
-        )
+        );
       }),
 
       ..._.map(eventMapOverrides, (eventName, callbackName) =>
@@ -173,7 +174,7 @@ export default function transformer(file, api) {
             }
           )
         ),
-    ]
+    ];
   }
 
   function txClassMethods() {
@@ -181,7 +182,7 @@ export default function transformer(file, api) {
       ...publicMethods.map(({ name, returns, returnsDesc }) => {
         return Object.assign(
           j.classMethod(
-            "method",
+            'method',
             j.identifier(name),
             [],
             j.blockStatement([
@@ -201,9 +202,9 @@ export default function transformer(file, api) {
               ),
             ],
           }
-        )
+        );
       }),
-    ]
+    ];
   }
 
   function eventMap() {
@@ -219,18 +220,18 @@ export default function transformer(file, api) {
             j.stringLiteral(name)
           )
         ),
-    ]
+    ];
   }
 
   function updaterMap() {
     return [
       ...methodAsProps.map(({ name, args, desc }) => {
-        const [, prop] = name.match(/^set(\S+)/)
+        const [, prop] = name.match(/^set(\S+)/);
 
         return j.objectMethod(
-          "method",
+          'method',
           j.identifier(_.lowerFirst(prop)),
-          [j.identifier("instance"), j.identifier(_.lowerFirst(prop))],
+          [j.identifier('instance'), j.identifier(_.lowerFirst(prop))],
           j.blockStatement([
             j.expressionStatement(
               j.callExpression(j.identifier(`instance.${name}`), [
@@ -238,9 +239,9 @@ export default function transformer(file, api) {
               ])
             ),
           ])
-        )
+        );
       }),
-    ]
+    ];
   }
 }
 
@@ -249,4 +250,4 @@ const AUTO_GENERATED_HEADER = `
  * This file is auto-generated from the corresponding file at \`src/macros/\`.
  * Please **DO NOT** edit this file directly when creating PRs.
  * -----------------------------------------------------------------------------
- `
+ `;
