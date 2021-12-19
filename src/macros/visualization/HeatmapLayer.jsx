@@ -1,56 +1,56 @@
 /* global google */
-import invariant from "invariant"
-import React from "react"
-import PropTypes from "prop-types"
+import invariant from 'invariant';
+import { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import {
   construct,
   componentDidMount,
   componentDidUpdate,
   componentWillUnmount,
-} from "../../utils/MapChildHelper"
+} from '../../utils/MapChildHelper';
 
-import { MAP, HEATMAP_LAYER } from "../../constants"
+import { MAP, HEATMAP_LAYER } from '../../constants';
 
 export const __jscodeshiftPlaceholder__ = `{
   "eventMapOverrides": {
   },
   "getInstanceFromComponent": "this.state[HEATMAP_LAYER]"
-}`
+}`;
 
 /**
  * A wrapper around `google.maps.visualization.HeatmapLayer`
  *
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#HeatmapLayer
  */
-export class HeatmapLayer extends React.PureComponent {
-  static propTypes = {
-    __jscodeshiftPlaceholder__: null,
-  }
-
+export class HeatmapLayer extends PureComponent {
   static contextTypes = {
     [MAP]: PropTypes.object,
-  }
+  };
+
+  static propTypes = {
+    __jscodeshiftPlaceholder__: null,
+  };
 
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#HeatmapLayer
    */
   constructor(props, context) {
-    super(props, context)
+    super(props, context);
     invariant(
       google.maps.visualization,
       `Did you include "libraries=visualization" in the URL?`
-    )
-    const heatmapLayer = new google.maps.visualization.HeatmapLayer()
-    construct(HeatmapLayer.propTypes, updaterMap, this.props, heatmapLayer)
-    heatmapLayer.setMap(this.context[MAP])
+    );
+    const heatmapLayer = new google.maps.visualization.HeatmapLayer();
+    construct(HeatmapLayer.propTypes, updaterMap, this.props, heatmapLayer);
+    heatmapLayer.setMap(this.context[MAP]);
     this.state = {
       [HEATMAP_LAYER]: heatmapLayer,
-    }
+    };
   }
 
   componentDidMount() {
-    componentDidMount(this, this.state[HEATMAP_LAYER], eventMap)
+    componentDidMount(this, this.state[HEATMAP_LAYER], eventMap);
   }
 
   componentDidUpdate(prevProps) {
@@ -60,24 +60,24 @@ export class HeatmapLayer extends React.PureComponent {
       eventMap,
       updaterMap,
       prevProps
-    )
+    );
   }
 
   componentWillUnmount() {
-    componentWillUnmount(this)
-    const heatmapLayer = this.state[HEATMAP_LAYER]
+    componentWillUnmount(this);
+    const heatmapLayer = this.state[HEATMAP_LAYER];
     if (heatmapLayer) {
-      heatmapLayer.setMap(null)
+      heatmapLayer.setMap(null);
     }
   }
 
   render() {
-    return false
+    return false;
   }
 }
 
-export default HeatmapLayer
+export default HeatmapLayer;
 
-const eventMap = {}
+const eventMap = {};
 
-const updaterMap = {}
+const updaterMap = {};

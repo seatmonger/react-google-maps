@@ -5,26 +5,35 @@
  * -----------------------------------------------------------------------------
  */
 /* global google */
-import React from "react"
-import PropTypes from "prop-types"
-import makeMarkerWithLabel from "markerwithlabel"
-import ReactDOM from "react-dom"
+import { Children, PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import makeMarkerWithLabel from 'markerwithlabel';
+import ReactDOM from 'react-dom';
 
 import {
   componentDidMount,
   componentDidUpdate,
   componentWillUnmount,
   construct,
-} from "../../utils/MapChildHelper"
+} from '../../utils/MapChildHelper';
 
-import { MAP, MARKER_CLUSTERER, MARKER_WITH_LABEL } from "../../constants"
+import { MAP, MARKER_CLUSTERER, MARKER_WITH_LABEL } from '../../constants';
 
 /**
  * A wrapper around `MarkerWithLabel`
  *
  * @see https://cdn.rawgit.com/googlemaps/v3-utility-library/master/markerwithlabel/src/markerwithlabel.js
  */
-export class MarkerWithLabel extends React.PureComponent {
+export class MarkerWithLabel extends PureComponent {
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+    [MARKER_CLUSTERER]: PropTypes.object,
+  };
+
+  static defaultProps = {
+    labelVisible: true,
+  };
+
   static propTypes = {
     /**
      * It will be `MarkerWithLabel#labelContent`.
@@ -104,11 +113,6 @@ export class MarkerWithLabel extends React.PureComponent {
     defaultOptions: PropTypes.any,
 
     /**
-     * @type MarkerPlace
-     */
-    defaultPlace: PropTypes.any,
-
-    /**
      * @type LatLng|LatLngLiteral
      */
     defaultPosition: PropTypes.any,
@@ -172,11 +176,6 @@ export class MarkerWithLabel extends React.PureComponent {
      * @type MarkerOptions
      */
     options: PropTypes.any,
-
-    /**
-     * @type MarkerPlace
-     */
-    place: PropTypes.any,
 
     /**
      * @type LatLng|LatLngLiteral
@@ -261,6 +260,11 @@ export class MarkerWithLabel extends React.PureComponent {
     /**
      * function
      */
+    onContextmenu: PropTypes.func,
+
+    /**
+     * function
+     */
     onCursorChanged: PropTypes.func,
 
     /**
@@ -307,50 +311,41 @@ export class MarkerWithLabel extends React.PureComponent {
      * function
      */
     onZindexChanged: PropTypes.func,
-  }
-
-  static defaultProps = {
-    labelVisible: true,
-  }
-
-  static contextTypes = {
-    [MAP]: PropTypes.object,
-    [MARKER_CLUSTERER]: PropTypes.object,
-  }
+  };
 
   /*
    * @see https://cdn.rawgit.com/googlemaps/v3-utility-library/master/markerwithlabel/src/markerwithlabel.js
    */
   constructor(props, context) {
-    super(props, context)
-    const NativeMarkerWithLabel = makeMarkerWithLabel(google.maps)
-    const markerWithLabel = new NativeMarkerWithLabel()
+    super(props, context);
+    const NativeMarkerWithLabel = makeMarkerWithLabel(google.maps);
+    const markerWithLabel = new NativeMarkerWithLabel();
     construct(
       MarkerWithLabel.propTypes,
       updaterMap,
       this.props,
       markerWithLabel
-    )
-    const markerClusterer = this.context[MARKER_CLUSTERER]
+    );
+    const markerClusterer = this.context[MARKER_CLUSTERER];
     if (markerClusterer) {
-      markerClusterer.addMarker(markerWithLabel, !!this.props.noRedraw)
+      markerClusterer.addMarker(markerWithLabel, !!this.props.noRedraw);
     } else {
-      markerWithLabel.setMap(this.context[MAP])
+      markerWithLabel.setMap(this.context[MAP]);
     }
     this.state = {
       [MARKER_WITH_LABEL]: markerWithLabel,
-    }
+    };
   }
 
   componentDidMount() {
-    componentDidMount(this, this.state[MARKER_WITH_LABEL], eventMap)
-    const container = document.createElement(`div`)
+    componentDidMount(this, this.state[MARKER_WITH_LABEL], eventMap);
+    const container = document.createElement(`div`);
     ReactDOM.unstable_renderSubtreeIntoContainer(
       this,
-      React.Children.only(this.props.children),
+      Children.only(this.props.children),
       container
-    )
-    this.state[MARKER_WITH_LABEL].set(`labelContent`, container)
+    );
+    this.state[MARKER_WITH_LABEL].set(`labelContent`, container);
   }
 
   componentDidUpdate(prevProps) {
@@ -360,178 +355,170 @@ export class MarkerWithLabel extends React.PureComponent {
       eventMap,
       updaterMap,
       prevProps
-    )
+    );
     if (this.props.children !== prevProps.children) {
       ReactDOM.unstable_renderSubtreeIntoContainer(
         this,
-        React.Children.only(this.props.children),
-        this.state[MARKER_WITH_LABEL].get("labelContent")
-      )
+        Children.only(this.props.children),
+        this.state[MARKER_WITH_LABEL].get('labelContent')
+      );
     }
   }
 
   componentWillUnmount() {
-    componentWillUnmount(this)
-    const markerWithLabel = this.state[MARKER_WITH_LABEL]
+    componentWillUnmount(this);
+    const markerWithLabel = this.state[MARKER_WITH_LABEL];
     if (markerWithLabel) {
-      const markerClusterer = this.context[MARKER_CLUSTERER]
+      const markerClusterer = this.context[MARKER_CLUSTERER];
       if (markerClusterer) {
-        markerClusterer.removeMarker(markerWithLabel, !!this.props.noRedraw)
+        markerClusterer.removeMarker(markerWithLabel, !!this.props.noRedraw);
       }
-      if (markerWithLabel.get("labelContent")) {
-        ReactDOM.unmountComponentAtNode(markerWithLabel.get("labelContent"))
+      if (markerWithLabel.get('labelContent')) {
+        ReactDOM.unmountComponentAtNode(markerWithLabel.get('labelContent'));
       }
-      markerWithLabel.setMap(null)
+      markerWithLabel.setMap(null);
     }
   }
 
-  render() {
-    return false
-  }
-
   /**
-   *
-   * @type Animation
+   * Get the currently running animation.
+   * @type Animation|null|undefined
    * @public
    */
   getAnimation() {
-    return this.state[MARKER_WITH_LABEL].getAnimation()
+    return this.state[MARKER_WITH_LABEL].getAnimation();
   }
 
   /**
-   *
+   * Get the clickable status of the `[Marker](/maps/documentation/javascript/reference/marker#Marker)`.
    * @type boolean
    * @public
    */
   getClickable() {
-    return this.state[MARKER_WITH_LABEL].getClickable()
+    return this.state[MARKER_WITH_LABEL].getClickable();
   }
 
   /**
-   *
-   * @type string
+   * Get the mouse cursor type shown on hover.
+   * @type string|null|undefined
    * @public
    */
   getCursor() {
-    return this.state[MARKER_WITH_LABEL].getCursor()
+    return this.state[MARKER_WITH_LABEL].getCursor();
   }
 
   /**
-   *
+   * Get the draggable status of the `[Marker](/maps/documentation/javascript/reference/marker#Marker)`.
    * @type boolean
    * @public
    */
   getDraggable() {
-    return this.state[MARKER_WITH_LABEL].getDraggable()
+    return this.state[MARKER_WITH_LABEL].getDraggable();
   }
 
   /**
-   *
-   * @type string|Icon|Symbol
+   * Get the icon of the `[Marker](/maps/documentation/javascript/reference/marker#Marker)`. See `[MarkerOptions.icon](/maps/documentation/javascript/reference/marker#MarkerOptions.icon)`.
+   * @type string|Icon|null|Symbol|undefined
    * @public
    */
   getIcon() {
-    return this.state[MARKER_WITH_LABEL].getIcon()
+    return this.state[MARKER_WITH_LABEL].getIcon();
   }
 
   /**
-   *
-   * @type MarkerLabel
+   * Get the label of the `[Marker](/maps/documentation/javascript/reference/marker#Marker)`. See `[MarkerOptions.label](/maps/documentation/javascript/reference/marker#MarkerOptions.label)`.
+   * @type MarkerLabel|null|undefined
    * @public
    */
   getLabel() {
-    return this.state[MARKER_WITH_LABEL].getLabel()
+    return this.state[MARKER_WITH_LABEL].getLabel();
   }
 
   /**
-   *
-   * @type number
+   * Get the opacity of the `[Marker](/maps/documentation/javascript/reference/marker#Marker)`.
+   * @type number|null|undefined
    * @public
    */
   getOpacity() {
-    return this.state[MARKER_WITH_LABEL].getOpacity()
+    return this.state[MARKER_WITH_LABEL].getOpacity();
   }
 
   /**
-   *
-   * @type MarkerPlace
-   * @public
-   */
-  getPlace() {
-    return this.state[MARKER_WITH_LABEL].getPlace()
-  }
-
-  /**
-   *
-   * @type LatLng
+   * Get the position of the `[Marker](/maps/documentation/javascript/reference/marker#Marker)`.
+   * @type LatLng|null|undefined
    * @public
    */
   getPosition() {
-    return this.state[MARKER_WITH_LABEL].getPosition()
+    return this.state[MARKER_WITH_LABEL].getPosition();
   }
 
   /**
-   *
-   * @type MarkerShape
+   * Get the shape of the `[Marker](/maps/documentation/javascript/reference/marker#Marker)` used for interaction. See `[MarkerOptions.shape](/maps/documentation/javascript/reference/marker#MarkerOptions.shape)` and `[MarkerShape](/maps/documentation/javascript/reference/marker#MarkerShape)`.
+   * @type MarkerShape|null|undefined
    * @public
    */
   getShape() {
-    return this.state[MARKER_WITH_LABEL].getShape()
+    return this.state[MARKER_WITH_LABEL].getShape();
   }
 
   /**
-   *
-   * @type string
+   * Get the title of the `[Marker](/maps/documentation/javascript/reference/marker#Marker)` tooltip. See `[MarkerOptions.title](/maps/documentation/javascript/reference/marker#MarkerOptions.title)`.
+   * @type string|null|undefined
    * @public
    */
   getTitle() {
-    return this.state[MARKER_WITH_LABEL].getTitle()
+    return this.state[MARKER_WITH_LABEL].getTitle();
   }
 
   /**
-   *
+   * Get the visibility of the `[Marker](/maps/documentation/javascript/reference/marker#Marker)`.
    * @type boolean
    * @public
    */
   getVisible() {
-    return this.state[MARKER_WITH_LABEL].getVisible()
+    return this.state[MARKER_WITH_LABEL].getVisible();
   }
 
   /**
-   *
-   * @type number
+   * Get the zIndex of the `[Marker](/maps/documentation/javascript/reference/marker#Marker)`. See `[MarkerOptions.zIndex](/maps/documentation/javascript/reference/marker#MarkerOptions.zIndex)`.
+   * @type number|null|undefined
    * @public
    */
   getZIndex() {
-    return this.state[MARKER_WITH_LABEL].getZIndex()
+    return this.state[MARKER_WITH_LABEL].getZIndex();
+  }
+
+  render() {
+    return false;
   }
 }
 
-export default MarkerWithLabel
+export default MarkerWithLabel;
 
 const eventMap = {
-  onDblClick: "dblclick",
-  onDragEnd: "dragend",
-  onDragStart: "dragstart",
-  onMouseDown: "mousedown",
-  onMouseOut: "mouseout",
-  onMouseOver: "mouseover",
-  onMouseUp: "mouseup",
-  onRightClick: "rightclick",
-  onAnimationChanged: "animation_changed",
-  onClick: "click",
-  onClickableChanged: "clickable_changed",
-  onCursorChanged: "cursor_changed",
-  onDrag: "drag",
-  onDraggableChanged: "draggable_changed",
-  onFlatChanged: "flat_changed",
-  onIconChanged: "icon_changed",
-  onPositionChanged: "position_changed",
-  onShapeChanged: "shape_changed",
-  onTitleChanged: "title_changed",
-  onVisibleChanged: "visible_changed",
-  onZindexChanged: "zindex_changed",
-}
+  onDblClick: 'dblclick',
+  onDragEnd: 'dragend',
+  onDragStart: 'dragstart',
+  onMouseDown: 'mousedown',
+  onMouseOut: 'mouseout',
+  onMouseOver: 'mouseover',
+  onMouseUp: 'mouseup',
+  onRightClick: 'rightclick',
+  onAnimationChanged: 'animation_changed',
+  onClick: 'click',
+  onClickableChanged: 'clickable_changed',
+  onContextmenu: 'contextmenu',
+  onCursorChanged: 'cursor_changed',
+  onDrag: 'drag',
+  onDraggableChanged: 'draggable_changed',
+  onFlatChanged: 'flat_changed',
+  onIconChanged: 'icon_changed',
+  onPositionChanged: 'position_changed',
+  onShapeChanged: 'shape_changed',
+  onTitleChanged: 'title_changed',
+  onVisibleChanged: 'visible_changed',
+  onZindexChanged: 'zindex_changed',
+};
 
 const updaterMap = {
   /**
@@ -539,7 +526,7 @@ const updaterMap = {
    * @see https://cdn.rawgit.com/googlemaps/v3-utility-library/master/markerwithlabel/src/markerwithlabel.js
    */
   labelAnchor(instance, labelAnchor) {
-    instance.set(`labelAnchor`, labelAnchor)
+    instance.set(`labelAnchor`, labelAnchor);
   },
 
   /**
@@ -547,7 +534,7 @@ const updaterMap = {
    * @see https://cdn.rawgit.com/googlemaps/v3-utility-library/master/markerwithlabel/src/markerwithlabel.js
    */
   labelClass(instance, labelClass) {
-    instance.set(`labelClass`, labelClass)
+    instance.set(`labelClass`, labelClass);
   },
 
   /**
@@ -555,7 +542,7 @@ const updaterMap = {
    * @see https://cdn.rawgit.com/googlemaps/v3-utility-library/master/markerwithlabel/src/markerwithlabel.js
    */
   labelStyle(instance, labelStyle) {
-    instance.set(`labelStyle`, labelStyle)
+    instance.set(`labelStyle`, labelStyle);
   },
 
   /**
@@ -563,62 +550,58 @@ const updaterMap = {
    * @see https://cdn.rawgit.com/googlemaps/v3-utility-library/master/markerwithlabel/src/markerwithlabel.js
    */
   labelVisible(instance, labelVisible) {
-    instance.set(`labelVisible`, labelVisible)
+    instance.set(`labelVisible`, labelVisible);
   },
 
   animation(instance, animation) {
-    instance.setAnimation(animation)
+    instance.setAnimation(animation);
   },
 
   clickable(instance, clickable) {
-    instance.setClickable(clickable)
+    instance.setClickable(clickable);
   },
 
   cursor(instance, cursor) {
-    instance.setCursor(cursor)
+    instance.setCursor(cursor);
   },
 
   draggable(instance, draggable) {
-    instance.setDraggable(draggable)
+    instance.setDraggable(draggable);
   },
 
   icon(instance, icon) {
-    instance.setIcon(icon)
+    instance.setIcon(icon);
   },
 
   label(instance, label) {
-    instance.setLabel(label)
+    instance.setLabel(label);
   },
 
   opacity(instance, opacity) {
-    instance.setOpacity(opacity)
+    instance.setOpacity(opacity);
   },
 
   options(instance, options) {
-    instance.setOptions(options)
-  },
-
-  place(instance, place) {
-    instance.setPlace(place)
+    instance.setOptions(options);
   },
 
   position(instance, position) {
-    instance.setPosition(position)
+    instance.setPosition(position);
   },
 
   shape(instance, shape) {
-    instance.setShape(shape)
+    instance.setShape(shape);
   },
 
   title(instance, title) {
-    instance.setTitle(title)
+    instance.setTitle(title);
   },
 
   visible(instance, visible) {
-    instance.setVisible(visible)
+    instance.setVisible(visible);
   },
 
   zIndex(instance, zIndex) {
-    instance.setZIndex(zIndex)
+    instance.setZIndex(zIndex);
   },
-}
+};

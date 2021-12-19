@@ -4,26 +4,30 @@
  * Please **DO NOT** edit this file directly when creating PRs.
  * -----------------------------------------------------------------------------
  */
-import invariant from "invariant"
-import React from "react"
-import PropTypes from "prop-types"
+import invariant from 'invariant';
+import { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import {
   construct,
   componentDidMount,
   componentDidUpdate,
   componentWillUnmount,
-} from "../utils/MapChildHelper"
+} from '../utils/MapChildHelper';
 
-import { MAP } from "../constants"
+import { MAP } from '../constants';
 
 /**
  * A wrapper around `google.maps.Map`
  *
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map
  */
-export class Map extends React.PureComponent {
-  static displayName = "GoogleMap"
+export class Map extends PureComponent {
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+  };
+
+  static displayName = 'GoogleMap';
 
   static propTypes = {
     /**
@@ -206,71 +210,36 @@ export class Map extends React.PureComponent {
      * function
      */
     onZoomChanged: PropTypes.func,
-  }
-
-  static contextTypes = {
-    [MAP]: PropTypes.object,
-  }
-
-  /**
-   * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map
-   * @public
-   */
-  fitBounds(...args) {
-    return this.context[MAP].fitBounds(...args)
-  }
-
-  /**
-   * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map
-   * @public
-   */
-  panBy(...args) {
-    return this.context[MAP].panBy(...args)
-  }
-
-  /**
-   * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map
-   * @public
-   */
-  panTo(...args) {
-    return this.context[MAP].panTo(...args)
-  }
-
-  /**
-   * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map
-   * @public
-   */
-  panToBounds(...args) {
-    return this.context[MAP].panToBounds(...args)
-  }
+  };
 
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map
    */
   constructor(props, context) {
-    super(props, context)
+    super(props, context);
     invariant(
       !!this.context[MAP],
       `Did you wrap <GoogleMap> component with withGoogleMap() HOC?`
-    )
-    construct(GoogleMap.propTypes, updaterMap, this.props, this.context[MAP])
+    );
+    construct(GoogleMap.propTypes, updaterMap, this.props, this.context[MAP]);
   }
 
   componentDidMount() {
-    componentDidMount(this, this.context[MAP], eventMap)
+    componentDidMount(this, this.context[MAP], eventMap);
   }
 
   componentDidUpdate(prevProps) {
-    componentDidUpdate(this, this.context[MAP], eventMap, updaterMap, prevProps)
+    componentDidUpdate(
+      this,
+      this.context[MAP],
+      eventMap,
+      updaterMap,
+      prevProps
+    );
   }
 
   componentWillUnmount() {
-    componentWillUnmount(this)
-  }
-
-  render() {
-    const { children } = this.props
-    return <div>{children}</div>
+    componentWillUnmount(this);
   }
 
   /**
@@ -279,7 +248,7 @@ export class Map extends React.PureComponent {
    * @public
    */
   getBounds() {
-    return this.context[MAP].getBounds()
+    return this.context[MAP].getBounds();
   }
 
   /**
@@ -288,7 +257,7 @@ export class Map extends React.PureComponent {
    * @public
    */
   getCenter() {
-    return this.context[MAP].getCenter()
+    return this.context[MAP].getCenter();
   }
 
   /**
@@ -297,7 +266,7 @@ export class Map extends React.PureComponent {
    * @public
    */
   getClickableIcons() {
-    return this.context[MAP].getClickableIcons()
+    return this.context[MAP].getClickableIcons();
   }
 
   /**
@@ -306,7 +275,7 @@ export class Map extends React.PureComponent {
    * @public
    */
   getDiv() {
-    return this.context[MAP].getDiv()
+    return this.context[MAP].getDiv();
   }
 
   /**
@@ -315,7 +284,7 @@ export class Map extends React.PureComponent {
    * @public
    */
   getHeading() {
-    return this.context[MAP].getHeading()
+    return this.context[MAP].getHeading();
   }
 
   /**
@@ -324,7 +293,7 @@ export class Map extends React.PureComponent {
    * @public
    */
   getMapTypeId() {
-    return this.context[MAP].getMapTypeId()
+    return this.context[MAP].getMapTypeId();
   }
 
   /**
@@ -333,7 +302,7 @@ export class Map extends React.PureComponent {
    * @public
    */
   getProjection() {
-    return this.context[MAP].getProjection()
+    return this.context[MAP].getProjection();
   }
 
   /**
@@ -342,7 +311,7 @@ export class Map extends React.PureComponent {
    * @public
    */
   getStreetView() {
-    return this.context[MAP].getStreetView()
+    return this.context[MAP].getStreetView();
   }
 
   /**
@@ -351,7 +320,7 @@ export class Map extends React.PureComponent {
    * @public
    */
   getTilt() {
-    return this.context[MAP].getTilt()
+    return this.context[MAP].getTilt();
   }
 
   /**
@@ -360,70 +329,107 @@ export class Map extends React.PureComponent {
    * @public
    */
   getZoom() {
-    return this.context[MAP].getZoom()
+    return this.context[MAP].getZoom();
+  }
+
+  /**
+   * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map
+   * @public
+   */
+  fitBounds(...args) {
+    return this.context[MAP].fitBounds(...args);
+  }
+
+  /**
+   * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map
+   * @public
+   */
+  panBy(...args) {
+    return this.context[MAP].panBy(...args);
+  }
+
+  /**
+   * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map
+   * @public
+   */
+  panTo(...args) {
+    return this.context[MAP].panTo(...args);
+  }
+
+  /**
+   * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Map
+   * @public
+   */
+  panToBounds(...args) {
+    return this.context[MAP].panToBounds(...args);
+  }
+
+  render() {
+    const { children } = this.props;
+    return <div>{children}</div>;
   }
 }
 
-export const GoogleMap = Map
+export const GoogleMap = Map;
 
-export default Map
+export default Map;
 
 const eventMap = {
-  onDblClick: "dblclick",
-  onDragEnd: "dragend",
-  onDragStart: "dragstart",
-  onMapTypeIdChanged: "maptypeid_changed",
-  onMouseMove: "mousemove",
-  onMouseOut: "mouseout",
-  onMouseOver: "mouseover",
-  onRightClick: "rightclick",
-  onTilesLoaded: "tilesloaded",
-  onBoundsChanged: "bounds_changed",
-  onCenterChanged: "center_changed",
-  onClick: "click",
-  onDrag: "drag",
-  onHeadingChanged: "heading_changed",
-  onIdle: "idle",
-  onProjectionChanged: "projection_changed",
-  onResize: "resize",
-  onTiltChanged: "tilt_changed",
-  onZoomChanged: "zoom_changed",
-}
+  onDblClick: 'dblclick',
+  onDragEnd: 'dragend',
+  onDragStart: 'dragstart',
+  onMapTypeIdChanged: 'maptypeid_changed',
+  onMouseMove: 'mousemove',
+  onMouseOut: 'mouseout',
+  onMouseOver: 'mouseover',
+  onRightClick: 'rightclick',
+  onTilesLoaded: 'tilesloaded',
+  onBoundsChanged: 'bounds_changed',
+  onCenterChanged: 'center_changed',
+  onClick: 'click',
+  onDrag: 'drag',
+  onHeadingChanged: 'heading_changed',
+  onIdle: 'idle',
+  onProjectionChanged: 'projection_changed',
+  onResize: 'resize',
+  onTiltChanged: 'tilt_changed',
+  onZoomChanged: 'zoom_changed',
+};
 
 const updaterMap = {
   extraMapTypes(instance, extra) {
-    extra.forEach(it => instance.mapTypes.set(...it))
+    extra.forEach(it => instance.mapTypes.set(...it));
   },
 
   center(instance, center) {
-    instance.setCenter(center)
+    instance.setCenter(center);
   },
 
   clickableIcons(instance, clickableIcons) {
-    instance.setClickableIcons(clickableIcons)
+    instance.setClickableIcons(clickableIcons);
   },
 
   heading(instance, heading) {
-    instance.setHeading(heading)
+    instance.setHeading(heading);
   },
 
   mapTypeId(instance, mapTypeId) {
-    instance.setMapTypeId(mapTypeId)
+    instance.setMapTypeId(mapTypeId);
   },
 
   options(instance, options) {
-    instance.setOptions(options)
+    instance.setOptions(options);
   },
 
   streetView(instance, streetView) {
-    instance.setStreetView(streetView)
+    instance.setStreetView(streetView);
   },
 
   tilt(instance, tilt) {
-    instance.setTilt(tilt)
+    instance.setTilt(tilt);
   },
 
   zoom(instance, zoom) {
-    instance.setZoom(zoom)
+    instance.setZoom(zoom);
   },
-}
+};

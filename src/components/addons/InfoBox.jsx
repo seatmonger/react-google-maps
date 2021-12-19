@@ -1,24 +1,29 @@
-import canUseDOM from "can-use-dom"
-import invariant from "invariant"
-import React from "react"
-import ReactDOM from "react-dom"
-import PropTypes from "prop-types"
+import canUseDOM from 'can-use-dom';
+import invariant from 'invariant';
+import { Children, PureComponent } from 'react';
+import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 
 import {
   construct,
   componentDidMount,
   componentDidUpdate,
   componentWillUnmount,
-} from "../../utils/MapChildHelper"
+} from '../../utils/MapChildHelper';
 
-import { MAP, ANCHOR, INFO_BOX } from "../../constants"
+import { MAP, ANCHOR, INFO_BOX } from '../../constants';
 
 /**
  * A wrapper around `InfoBox`
  *
  * @see http://htmlpreview.github.io/?https://github.com/googlemaps/v3-utility-library/blob/master/infobox/docs/reference.html
  */
-export class InfoBox extends React.PureComponent {
+export class InfoBox extends PureComponent {
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+    [ANCHOR]: PropTypes.object,
+  };
+
   static propTypes = {
     /**
      * @type InfoBoxOptions
@@ -84,49 +89,44 @@ export class InfoBox extends React.PureComponent {
      * function
      */
     onZindexChanged: PropTypes.func,
-  }
-
-  static contextTypes = {
-    [MAP]: PropTypes.object,
-    [ANCHOR]: PropTypes.object,
-  }
+  };
 
   state = {
     [INFO_BOX]: null,
-  }
+  };
 
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#InfoBox
    */
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (!canUseDOM || this.state[INFO_BOX]) {
-      return
+      return;
     }
     const {
       InfoBox: GoogleMapsInfobox,
     } = require(/* "google-maps-infobox" uses "google" as a global variable. Since we don't
-       * have "google" on the server, we can not use it in server-side rendering.
-       * As a result, we import "google-maps-infobox" here to prevent an error on
-       * a isomorphic server.
-       */ `google-maps-infobox`)
-    const infoBox = new GoogleMapsInfobox()
-    construct(InfoBox.propTypes, updaterMap, this.props, infoBox)
-    infoBox.setMap(this.context[MAP])
+     * have "google" on the server, we can not use it in server-side rendering.
+     * As a result, we import "google-maps-infobox" here to prevent an error on
+     * a isomorphic server.
+     */ `google-maps-infobox`);
+    const infoBox = new GoogleMapsInfobox();
+    construct(InfoBox.propTypes, updaterMap, this.props, infoBox);
+    infoBox.setMap(this.context[MAP]);
     this.setState({
       [INFO_BOX]: infoBox,
-    })
+    });
   }
 
   componentDidMount() {
-    componentDidMount(this, this.state[INFO_BOX], eventMap)
-    const content = document.createElement(`div`)
+    componentDidMount(this, this.state[INFO_BOX], eventMap);
+    const content = document.createElement(`div`);
     ReactDOM.unstable_renderSubtreeIntoContainer(
       this,
-      React.Children.only(this.props.children),
+      Children.only(this.props.children),
       content
-    )
-    this.state[INFO_BOX].setContent(content)
-    open(this.state[INFO_BOX], this.context[ANCHOR])
+    );
+    this.state[INFO_BOX].setContent(content);
+    open(this.state[INFO_BOX], this.context[ANCHOR]);
   }
 
   componentDidUpdate(prevProps) {
@@ -136,29 +136,25 @@ export class InfoBox extends React.PureComponent {
       eventMap,
       updaterMap,
       prevProps
-    )
+    );
     if (this.props.children !== prevProps.children) {
       ReactDOM.unstable_renderSubtreeIntoContainer(
         this,
-        React.Children.only(this.props.children),
+        Children.only(this.props.children),
         this.state[INFO_BOX].getContent()
-      )
+      );
     }
   }
 
   componentWillUnmount() {
-    componentWillUnmount(this)
-    const infoBox = this.state[INFO_BOX]
+    componentWillUnmount(this);
+    const infoBox = this.state[INFO_BOX];
     if (infoBox) {
       if (infoBox.getContent()) {
-        ReactDOM.unmountComponentAtNode(infoBox.getContent())
+        ReactDOM.unmountComponentAtNode(infoBox.getContent());
       }
-      infoBox.setMap(null)
+      infoBox.setMap(null);
     }
-  }
-
-  render() {
-    return false
   }
 
   /**
@@ -166,7 +162,7 @@ export class InfoBox extends React.PureComponent {
    * @type LatLng
    */
   getPosition() {
-    return this.state[INFO_BOX].getPosition()
+    return this.state[INFO_BOX].getPosition();
   }
 
   /**
@@ -174,7 +170,7 @@ export class InfoBox extends React.PureComponent {
    * @type boolean
    */
   getVisible() {
-    return this.state[INFO_BOX].getVisible()
+    return this.state[INFO_BOX].getVisible();
   }
 
   /**
@@ -182,47 +178,51 @@ export class InfoBox extends React.PureComponent {
    * @type number
    */
   getZIndex() {
-    return this.state[INFO_BOX].getZIndex()
+    return this.state[INFO_BOX].getZIndex();
+  }
+
+  render() {
+    return false;
   }
 }
 
-export default InfoBox
+export default InfoBox;
 
 const open = (infoBox, anchor) => {
   if (anchor) {
-    infoBox.open(infoBox.getMap(), anchor)
+    infoBox.open(infoBox.getMap(), anchor);
   } else if (infoBox.getPosition()) {
-    infoBox.open(infoBox.getMap())
+    infoBox.open(infoBox.getMap());
   } else {
     invariant(
       false,
       `You must provide either an anchor (typically render it inside a <Marker>) or a position props for <InfoBox>.`
-    )
+    );
   }
-}
+};
 
 const eventMap = {
-  onCloseClick: "closeclick",
-  onDomReady: "domready",
-  onContentChanged: "content_changed",
-  onPositionChanged: "position_changed",
-  onZindexChanged: "zindex_changed",
-}
+  onCloseClick: 'closeclick',
+  onDomReady: 'domready',
+  onContentChanged: 'content_changed',
+  onPositionChanged: 'position_changed',
+  onZindexChanged: 'zindex_changed',
+};
 
 const updaterMap = {
   options(instance, options) {
-    instance.setOptions(options)
+    instance.setOptions(options);
   },
 
   position(instance, position) {
-    instance.setPosition(position)
+    instance.setPosition(position);
   },
 
   visible(instance, visible) {
-    instance.setVisible(visible)
+    instance.setVisible(visible);
   },
 
   zIndex(instance, zIndex) {
-    instance.setZIndex(zIndex)
+    instance.setZIndex(zIndex);
   },
-}
+};

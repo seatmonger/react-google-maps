@@ -5,24 +5,28 @@
  * -----------------------------------------------------------------------------
  */
 /* global google */
-import React from "react"
-import PropTypes from "prop-types"
+import { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import {
   construct,
   componentDidMount,
   componentDidUpdate,
   componentWillUnmount,
-} from "../utils/MapChildHelper"
+} from '../utils/MapChildHelper';
 
-import { MAP, POLYGON } from "../constants"
+import { MAP, POLYGON } from '../constants';
 
 /**
  * A wrapper around `google.maps.Polygon`
  *
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Polygon
  */
-export class Polygon extends React.PureComponent {
+export class Polygon extends PureComponent {
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+  };
+
   static propTypes = {
     /**
      * @type boolean
@@ -138,27 +142,23 @@ export class Polygon extends React.PureComponent {
      * function
      */
     onDrag: PropTypes.func,
-  }
-
-  static contextTypes = {
-    [MAP]: PropTypes.object,
-  }
+  };
 
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Polygon
    */
   constructor(props, context) {
-    super(props, context)
-    const polygon = new google.maps.Polygon()
-    construct(Polygon.propTypes, updaterMap, this.props, polygon)
-    polygon.setMap(this.context[MAP])
+    super(props, context);
+    const polygon = new google.maps.Polygon();
+    construct(Polygon.propTypes, updaterMap, this.props, polygon);
+    polygon.setMap(this.context[MAP]);
     this.state = {
       [POLYGON]: polygon,
-    }
+    };
   }
 
   componentDidMount() {
-    componentDidMount(this, this.state[POLYGON], eventMap)
+    componentDidMount(this, this.state[POLYGON], eventMap);
   }
 
   componentDidUpdate(prevProps) {
@@ -168,19 +168,15 @@ export class Polygon extends React.PureComponent {
       eventMap,
       updaterMap,
       prevProps
-    )
+    );
   }
 
   componentWillUnmount() {
-    componentWillUnmount(this)
-    const polygon = this.state[POLYGON]
+    componentWillUnmount(this);
+    const polygon = this.state[POLYGON];
     if (polygon) {
-      polygon.setMap(null)
+      polygon.setMap(null);
     }
-  }
-
-  render() {
-    return false
   }
 
   /**
@@ -189,7 +185,7 @@ export class Polygon extends React.PureComponent {
    * @public
    */
   getDraggable() {
-    return this.state[POLYGON].getDraggable()
+    return this.state[POLYGON].getDraggable();
   }
 
   /**
@@ -198,7 +194,7 @@ export class Polygon extends React.PureComponent {
    * @public
    */
   getEditable() {
-    return this.state[POLYGON].getEditable()
+    return this.state[POLYGON].getEditable();
   }
 
   /**
@@ -207,7 +203,7 @@ export class Polygon extends React.PureComponent {
    * @public
    */
   getPath() {
-    return this.state[POLYGON].getPath()
+    return this.state[POLYGON].getPath();
   }
 
   /**
@@ -216,7 +212,7 @@ export class Polygon extends React.PureComponent {
    * @public
    */
   getPaths() {
-    return this.state[POLYGON].getPaths()
+    return this.state[POLYGON].getPaths();
   }
 
   /**
@@ -225,48 +221,52 @@ export class Polygon extends React.PureComponent {
    * @public
    */
   getVisible() {
-    return this.state[POLYGON].getVisible()
+    return this.state[POLYGON].getVisible();
+  }
+
+  render() {
+    return false;
   }
 }
 
-export default Polygon
+export default Polygon;
 
 const eventMap = {
-  onDblClick: "dblclick",
-  onDragEnd: "dragend",
-  onDragStart: "dragstart",
-  onMouseDown: "mousedown",
-  onMouseMove: "mousemove",
-  onMouseOut: "mouseout",
-  onMouseOver: "mouseover",
-  onMouseUp: "mouseup",
-  onRightClick: "rightclick",
-  onClick: "click",
-  onDrag: "drag",
-}
+  onDblClick: 'dblclick',
+  onDragEnd: 'dragend',
+  onDragStart: 'dragstart',
+  onMouseDown: 'mousedown',
+  onMouseMove: 'mousemove',
+  onMouseOut: 'mouseout',
+  onMouseOver: 'mouseover',
+  onMouseUp: 'mouseup',
+  onRightClick: 'rightclick',
+  onClick: 'click',
+  onDrag: 'drag',
+};
 
 const updaterMap = {
   draggable(instance, draggable) {
-    instance.setDraggable(draggable)
+    instance.setDraggable(draggable);
   },
 
   editable(instance, editable) {
-    instance.setEditable(editable)
+    instance.setEditable(editable);
   },
 
   options(instance, options) {
-    instance.setOptions(options)
+    instance.setOptions(options);
   },
 
   path(instance, path) {
-    instance.setPath(path)
+    instance.setPath(path);
   },
 
   paths(instance, paths) {
-    instance.setPaths(paths)
+    instance.setPaths(paths);
   },
 
   visible(instance, visible) {
-    instance.setVisible(visible)
+    instance.setVisible(visible);
   },
-}
+};

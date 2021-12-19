@@ -1,15 +1,15 @@
 /* global google */
-import React from "react"
-import PropTypes from "prop-types"
+import { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import {
   construct,
   componentDidMount,
   componentDidUpdate,
   componentWillUnmount,
-} from "../utils/MapChildHelper"
+} from '../utils/MapChildHelper';
 
-import { MAP, RECTANGLE } from "../constants"
+import { MAP, RECTANGLE } from '../constants';
 
 export const __jscodeshiftPlaceholder__ = `{
   "eventMapOverrides": {
@@ -24,37 +24,37 @@ export const __jscodeshiftPlaceholder__ = `{
     "onRightClick": "rightclick"
   },
   "getInstanceFromComponent": "this.state[RECTANGLE]"
-}`
+}`;
 
 /**
  * A wrapper around `google.maps.Rectangle`
  *
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Rectangle
  */
-export class Rectangle extends React.PureComponent {
-  static propTypes = {
-    __jscodeshiftPlaceholder__: null,
-  }
-
+export class Rectangle extends PureComponent {
   static contextTypes = {
     [MAP]: PropTypes.object,
-  }
+  };
+
+  static propTypes = {
+    __jscodeshiftPlaceholder__: null,
+  };
 
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Rectangle
    */
   constructor(props, context) {
-    super(props, context)
-    const rectangle = new google.maps.Rectangle()
-    construct(Rectangle.propTypes, updaterMap, this.props, rectangle)
-    rectangle.setMap(this.context[MAP])
+    super(props, context);
+    const rectangle = new google.maps.Rectangle();
+    construct(Rectangle.propTypes, updaterMap, this.props, rectangle);
+    rectangle.setMap(this.context[MAP]);
     this.state = {
       [RECTANGLE]: rectangle,
-    }
+    };
   }
 
   componentDidMount() {
-    componentDidMount(this, this.state[RECTANGLE], eventMap)
+    componentDidMount(this, this.state[RECTANGLE], eventMap);
   }
 
   componentDidUpdate(prevProps) {
@@ -64,24 +64,24 @@ export class Rectangle extends React.PureComponent {
       eventMap,
       updaterMap,
       prevProps
-    )
+    );
   }
 
   componentWillUnmount() {
-    componentWillUnmount(this)
-    const rectangle = this.state[RECTANGLE]
+    componentWillUnmount(this);
+    const rectangle = this.state[RECTANGLE];
     if (rectangle) {
-      rectangle.setMap(null)
+      rectangle.setMap(null);
     }
   }
 
   render() {
-    return false
+    return false;
   }
 }
 
-export default Rectangle
+export default Rectangle;
 
-const eventMap = {}
+const eventMap = {};
 
-const updaterMap = {}
+const updaterMap = {};

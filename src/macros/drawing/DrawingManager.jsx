@@ -1,16 +1,16 @@
 /* global google */
-import invariant from "invariant"
-import React from "react"
-import PropTypes from "prop-types"
+import invariant from 'invariant';
+import { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import {
   construct,
   componentDidMount,
   componentDidUpdate,
   componentWillUnmount,
-} from "../../utils/MapChildHelper"
+} from '../../utils/MapChildHelper';
 
-import { MAP, DRAWING_MANAGER } from "../../constants"
+import { MAP, DRAWING_MANAGER } from '../../constants';
 
 export const __jscodeshiftPlaceholder__ = `{
   "eventMapOverrides": {
@@ -22,41 +22,41 @@ export const __jscodeshiftPlaceholder__ = `{
     "onRectangleComplete": "rectanglecomplete"
   },
   "getInstanceFromComponent": "this.state[DRAWING_MANAGER]"
-}`
+}`;
 
 /**
  * A wrapper around `google.maps.drawing.DrawingManager`
  *
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#DrawingManager
  */
-export class DrawingManager extends React.PureComponent {
-  static propTypes = {
-    __jscodeshiftPlaceholder__: null,
-  }
-
+export class DrawingManager extends PureComponent {
   static contextTypes = {
     [MAP]: PropTypes.object,
-  }
+  };
+
+  static propTypes = {
+    __jscodeshiftPlaceholder__: null,
+  };
 
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#DrawingManager
    */
   constructor(props, context) {
-    super(props, context)
+    super(props, context);
     invariant(
       google.maps.drawing,
       `Did you include "libraries=drawing" in the URL?`
-    )
-    const drawingManager = new google.maps.drawing.DrawingManager()
-    construct(DrawingManager.propTypes, updaterMap, this.props, drawingManager)
-    drawingManager.setMap(this.context[MAP])
+    );
+    const drawingManager = new google.maps.drawing.DrawingManager();
+    construct(DrawingManager.propTypes, updaterMap, this.props, drawingManager);
+    drawingManager.setMap(this.context[MAP]);
     this.state = {
       [DRAWING_MANAGER]: drawingManager,
-    }
+    };
   }
 
   componentDidMount() {
-    componentDidMount(this, this.state[DRAWING_MANAGER], eventMap)
+    componentDidMount(this, this.state[DRAWING_MANAGER], eventMap);
   }
 
   componentDidUpdate(prevProps) {
@@ -66,24 +66,24 @@ export class DrawingManager extends React.PureComponent {
       eventMap,
       updaterMap,
       prevProps
-    )
+    );
   }
 
   componentWillUnmount() {
-    componentWillUnmount(this)
-    const drawingManager = this.state[DRAWING_MANAGER]
+    componentWillUnmount(this);
+    const drawingManager = this.state[DRAWING_MANAGER];
     if (drawingManager) {
-      drawingManager.setMap(null)
+      drawingManager.setMap(null);
     }
   }
 
   render() {
-    return false
+    return false;
   }
 }
 
-export default DrawingManager
+export default DrawingManager;
 
-const eventMap = {}
+const eventMap = {};
 
-const updaterMap = {}
+const updaterMap = {};

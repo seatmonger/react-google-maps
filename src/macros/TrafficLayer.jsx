@@ -1,51 +1,51 @@
 /* global google */
-import React from "react"
-import PropTypes from "prop-types"
+import { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import {
   construct,
   componentDidMount,
   componentDidUpdate,
   componentWillUnmount,
-} from "../utils/MapChildHelper"
+} from '../utils/MapChildHelper';
 
-import { MAP, TRAFFIC_LAYER } from "../constants"
+import { MAP, TRAFFIC_LAYER } from '../constants';
 
 export const __jscodeshiftPlaceholder__ = `{
   "eventMapOverrides": {
   },
   "getInstanceFromComponent": "this.state[TRAFFIC_LAYER]"
-}`
+}`;
 
 /**
  * A wrapper around `google.maps.TrafficLayer`
  *
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#TrafficLayer
  */
-export class TrafficLayer extends React.PureComponent {
-  static propTypes = {
-    __jscodeshiftPlaceholder__: null,
-  }
-
+export class TrafficLayer extends PureComponent {
   static contextTypes = {
     [MAP]: PropTypes.object,
-  }
+  };
+
+  static propTypes = {
+    __jscodeshiftPlaceholder__: null,
+  };
 
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#TrafficLayer
    */
   constructor(props, context) {
-    super(props, context)
-    const trafficLayer = new google.maps.TrafficLayer()
-    construct(TrafficLayer.propTypes, updaterMap, this.props, trafficLayer)
-    trafficLayer.setMap(this.context[MAP])
+    super(props, context);
+    const trafficLayer = new google.maps.TrafficLayer();
+    construct(TrafficLayer.propTypes, updaterMap, this.props, trafficLayer);
+    trafficLayer.setMap(this.context[MAP]);
     this.state = {
       [TRAFFIC_LAYER]: trafficLayer,
-    }
+    };
   }
 
   componentDidMount() {
-    componentDidMount(this, this.state[TRAFFIC_LAYER], eventMap)
+    componentDidMount(this, this.state[TRAFFIC_LAYER], eventMap);
   }
 
   componentDidUpdate(prevProps) {
@@ -55,24 +55,24 @@ export class TrafficLayer extends React.PureComponent {
       eventMap,
       updaterMap,
       prevProps
-    )
+    );
   }
 
   componentWillUnmount() {
-    componentWillUnmount(this)
-    const trafficLayer = this.state[TRAFFIC_LAYER]
+    componentWillUnmount(this);
+    const trafficLayer = this.state[TRAFFIC_LAYER];
     if (trafficLayer) {
-      trafficLayer.setMap(null)
+      trafficLayer.setMap(null);
     }
   }
 
   render() {
-    return false
+    return false;
   }
 }
 
-export default TrafficLayer
+export default TrafficLayer;
 
-const eventMap = {}
+const eventMap = {};
 
-const updaterMap = {}
+const updaterMap = {};

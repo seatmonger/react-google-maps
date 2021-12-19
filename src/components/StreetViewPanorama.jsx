@@ -4,25 +4,33 @@
  * Please **DO NOT** edit this file directly when creating PRs.
  * -----------------------------------------------------------------------------
  */
-import invariant from "invariant"
-import React from "react"
-import PropTypes from "prop-types"
+import invariant from 'invariant';
+import { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import {
   construct,
   componentDidMount,
   componentDidUpdate,
   componentWillUnmount,
-} from "../utils/MapChildHelper"
+} from '../utils/MapChildHelper';
 
-import { MAP } from "../constants"
+import { MAP } from '../constants';
 
 /**
  * A wrapper around `google.maps.StreetViewPanorama`
  *
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#StreetViewPanorama
  */
-export class StreetViewPanorama extends React.PureComponent {
+export class StreetViewPanorama extends PureComponent {
+  static childContextTypes = {
+    [MAP]: PropTypes.object,
+  };
+
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+  };
+
   static propTypes = {
     /**
      * @type Array<StreetViewLink>
@@ -143,38 +151,30 @@ export class StreetViewPanorama extends React.PureComponent {
      * function
      */
     onZoomChanged: PropTypes.func,
-  }
-
-  static contextTypes = {
-    [MAP]: PropTypes.object,
-  }
-
-  static childContextTypes = {
-    [MAP]: PropTypes.object,
-  }
+  };
 
   constructor(props, context) {
-    super(props, context)
+    super(props, context);
     invariant(
       !!this.context[MAP],
       `Did you render <StreetViewPanorama> as a child of <GoogleMap> with withGoogleMap() HOC?`
-    )
+    );
     construct(
       StreetViewPanorama.propTypes,
       updaterMap,
       this.props,
       this.context[MAP].getStreetView()
-    )
+    );
   }
 
   getChildContext() {
     return {
       [MAP]: this.context[MAP].getStreetView(),
-    }
+    };
   }
 
   componentDidMount() {
-    componentDidMount(this, this.context[MAP].getStreetView(), eventMap)
+    componentDidMount(this, this.context[MAP].getStreetView(), eventMap);
   }
 
   componentDidUpdate(prevProps) {
@@ -184,20 +184,15 @@ export class StreetViewPanorama extends React.PureComponent {
       eventMap,
       updaterMap,
       prevProps
-    )
+    );
   }
 
   componentWillUnmount() {
-    componentWillUnmount(this)
-    const streetViewPanorama = this.context[MAP].getStreetView()
+    componentWillUnmount(this);
+    const streetViewPanorama = this.context[MAP].getStreetView();
     if (streetViewPanorama) {
-      streetViewPanorama.setVisible(false)
+      streetViewPanorama.setVisible(false);
     }
-  }
-
-  render() {
-    const { children } = this.props
-    return <div>{children}</div>
   }
 
   /**
@@ -206,7 +201,7 @@ export class StreetViewPanorama extends React.PureComponent {
    * @public
    */
   getLinks() {
-    return this.context[MAP].getLinks()
+    return this.context[MAP].getLinks();
   }
 
   /**
@@ -215,7 +210,7 @@ export class StreetViewPanorama extends React.PureComponent {
    * @public
    */
   getLocation() {
-    return this.context[MAP].getLocation()
+    return this.context[MAP].getLocation();
   }
 
   /**
@@ -224,7 +219,7 @@ export class StreetViewPanorama extends React.PureComponent {
    * @public
    */
   getMotionTracking() {
-    return this.context[MAP].getMotionTracking()
+    return this.context[MAP].getMotionTracking();
   }
 
   /**
@@ -233,25 +228,25 @@ export class StreetViewPanorama extends React.PureComponent {
    * @public
    */
   getPano() {
-    return this.context[MAP].getPano()
+    return this.context[MAP].getPano();
   }
 
   /**
    * Returns the heading and pitch of the photographer when this panorama was taken. For Street View panoramas on the road, this also reveals in which direction the car was travelling. This data is available after the `pano_changed` event.
-   * @type StreetViewPovpano_changed
+   * @type StreetViewPov
    * @public
    */
   getPhotographerPov() {
-    return this.context[MAP].getPhotographerPov()
+    return this.context[MAP].getPhotographerPov();
   }
 
   /**
    * Returns the current `LatLng` position for the Street View panorama.
-   * @type LatLngLatLng
+   * @type LatLng
    * @public
    */
   getPosition() {
-    return this.context[MAP].getPosition()
+    return this.context[MAP].getPosition();
   }
 
   /**
@@ -260,25 +255,25 @@ export class StreetViewPanorama extends React.PureComponent {
    * @public
    */
   getPov() {
-    return this.context[MAP].getPov()
+    return this.context[MAP].getPov();
   }
 
   /**
    * Returns the status of the panorama on completion of the `setPosition()` or `setPano()` request.
-   * @type StreetViewStatussetPosition()setPano()
+   * @type StreetViewStatus
    * @public
    */
   getStatus() {
-    return this.context[MAP].getStatus()
+    return this.context[MAP].getStatus();
   }
 
   /**
    * Returns `true` if the panorama is visible. It does not specify whether Street View imagery is available at the specified position.
-   * @type booleantrue
+   * @type boolean
    * @public
    */
   getVisible() {
-    return this.context[MAP].getVisible()
+    return this.context[MAP].getVisible();
   }
 
   /**
@@ -287,53 +282,58 @@ export class StreetViewPanorama extends React.PureComponent {
    * @public
    */
   getZoom() {
-    return this.context[MAP].getZoom()
+    return this.context[MAP].getZoom();
+  }
+
+  render() {
+    const { children } = this.props;
+    return <div>{children}</div>;
   }
 }
 
-export default StreetViewPanorama
+export default StreetViewPanorama;
 
 const eventMap = {
-  onCloseClick: "closeclick",
-  onPanoChanged: "pano_changed",
-  onPositionChanged: "position_changed",
-  onPovChanged: "pov_changed",
-  onResize: "resize",
-  onStatusChanged: "status_changed",
-  onVisibleChanged: "visible_changed",
-  onZoomChanged: "zoom_changed",
-}
+  onCloseClick: 'closeclick',
+  onPanoChanged: 'pano_changed',
+  onPositionChanged: 'position_changed',
+  onPovChanged: 'pov_changed',
+  onResize: 'resize',
+  onStatusChanged: 'status_changed',
+  onVisibleChanged: 'visible_changed',
+  onZoomChanged: 'zoom_changed',
+};
 
 const updaterMap = {
   links(instance, links) {
-    instance.setLinks(links)
+    instance.setLinks(links);
   },
 
   motionTracking(instance, motionTracking) {
-    instance.setMotionTracking(motionTracking)
+    instance.setMotionTracking(motionTracking);
   },
 
   options(instance, options) {
-    instance.setOptions(options)
+    instance.setOptions(options);
   },
 
   pano(instance, pano) {
-    instance.setPano(pano)
+    instance.setPano(pano);
   },
 
   position(instance, position) {
-    instance.setPosition(position)
+    instance.setPosition(position);
   },
 
   pov(instance, pov) {
-    instance.setPov(pov)
+    instance.setPov(pov);
   },
 
   visible(instance, visible) {
-    instance.setVisible(visible)
+    instance.setVisible(visible);
   },
 
   zoom(instance, zoom) {
-    instance.setZoom(zoom)
+    instance.setZoom(zoom);
   },
-}
+};

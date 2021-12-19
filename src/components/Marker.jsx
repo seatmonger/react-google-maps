@@ -5,24 +5,33 @@
  * -----------------------------------------------------------------------------
  */
 /* global google */
-import React from "react"
-import PropTypes from "prop-types"
+import { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import {
   construct,
   componentDidMount,
   componentDidUpdate,
   componentWillUnmount,
-} from "../utils/MapChildHelper"
+} from '../utils/MapChildHelper';
 
-import { MAP, MARKER, ANCHOR, MARKER_CLUSTERER } from "../constants"
+import { MAP, MARKER, ANCHOR, MARKER_CLUSTERER } from '../constants';
 
 /**
  * A wrapper around `google.maps.Marker`
  *
  * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Marker
  */
-export class Marker extends React.PureComponent {
+export class Marker extends PureComponent {
+  static childContextTypes = {
+    [ANCHOR]: PropTypes.object,
+  };
+
+  static contextTypes = {
+    [MAP]: PropTypes.object,
+    [MARKER_CLUSTERER]: PropTypes.object,
+  };
+
   static propTypes = {
     /**
      * For the 2nd argument of `MarkerCluster#addMarker`
@@ -69,11 +78,6 @@ export class Marker extends React.PureComponent {
      * @type MarkerOptions
      */
     defaultOptions: PropTypes.any,
-
-    /**
-     * @type MarkerPlace
-     */
-    defaultPlace: PropTypes.any,
 
     /**
      * @type LatLng|LatLngLiteral
@@ -139,11 +143,6 @@ export class Marker extends React.PureComponent {
      * @type MarkerOptions
      */
     options: PropTypes.any,
-
-    /**
-     * @type MarkerPlace
-     */
-    place: PropTypes.any,
 
     /**
      * @type LatLng|LatLngLiteral
@@ -274,43 +273,34 @@ export class Marker extends React.PureComponent {
      * function
      */
     onZindexChanged: PropTypes.func,
-  }
-
-  static contextTypes = {
-    [MAP]: PropTypes.object,
-    [MARKER_CLUSTERER]: PropTypes.object,
-  }
-
-  static childContextTypes = {
-    [ANCHOR]: PropTypes.object,
-  }
+  };
 
   /*
    * @see https://developers.google.com/maps/documentation/javascript/3.exp/reference#Marker
    */
   constructor(props, context) {
-    super(props, context)
-    const marker = new google.maps.Marker()
-    construct(Marker.propTypes, updaterMap, this.props, marker)
-    const markerClusterer = this.context[MARKER_CLUSTERER]
+    super(props, context);
+    const marker = new google.maps.Marker();
+    construct(Marker.propTypes, updaterMap, this.props, marker);
+    const markerClusterer = this.context[MARKER_CLUSTERER];
     if (markerClusterer) {
-      markerClusterer.addMarker(marker, !!this.props.noRedraw)
+      markerClusterer.addMarker(marker, !!this.props.noRedraw);
     } else {
-      marker.setMap(this.context[MAP])
+      marker.setMap(this.context[MAP]);
     }
     this.state = {
       [MARKER]: marker,
-    }
+    };
   }
 
   getChildContext() {
     return {
       [ANCHOR]: this.context[ANCHOR] || this.state[MARKER],
-    }
+    };
   }
 
   componentDidMount() {
-    componentDidMount(this, this.state[MARKER], eventMap)
+    componentDidMount(this, this.state[MARKER], eventMap);
   }
 
   componentDidUpdate(prevProps) {
@@ -320,24 +310,19 @@ export class Marker extends React.PureComponent {
       eventMap,
       updaterMap,
       prevProps
-    )
+    );
   }
 
   componentWillUnmount() {
-    componentWillUnmount(this)
-    const marker = this.state[MARKER]
+    componentWillUnmount(this);
+    const marker = this.state[MARKER];
     if (marker) {
-      const markerClusterer = this.context[MARKER_CLUSTERER]
+      const markerClusterer = this.context[MARKER_CLUSTERER];
       if (markerClusterer) {
-        markerClusterer.removeMarker(marker, !!this.props.noRedraw)
+        markerClusterer.removeMarker(marker, !!this.props.noRedraw);
       }
-      marker.setMap(null)
+      marker.setMap(null);
     }
-  }
-
-  render() {
-    const { children } = this.props
-    return <div>{children}</div>
   }
 
   /**
@@ -346,7 +331,7 @@ export class Marker extends React.PureComponent {
    * @public
    */
   getAnimation() {
-    return this.state[MARKER].getAnimation()
+    return this.state[MARKER].getAnimation();
   }
 
   /**
@@ -355,7 +340,7 @@ export class Marker extends React.PureComponent {
    * @public
    */
   getClickable() {
-    return this.state[MARKER].getClickable()
+    return this.state[MARKER].getClickable();
   }
 
   /**
@@ -364,7 +349,7 @@ export class Marker extends React.PureComponent {
    * @public
    */
   getCursor() {
-    return this.state[MARKER].getCursor()
+    return this.state[MARKER].getCursor();
   }
 
   /**
@@ -373,7 +358,7 @@ export class Marker extends React.PureComponent {
    * @public
    */
   getDraggable() {
-    return this.state[MARKER].getDraggable()
+    return this.state[MARKER].getDraggable();
   }
 
   /**
@@ -382,7 +367,7 @@ export class Marker extends React.PureComponent {
    * @public
    */
   getIcon() {
-    return this.state[MARKER].getIcon()
+    return this.state[MARKER].getIcon();
   }
 
   /**
@@ -391,7 +376,7 @@ export class Marker extends React.PureComponent {
    * @public
    */
   getLabel() {
-    return this.state[MARKER].getLabel()
+    return this.state[MARKER].getLabel();
   }
 
   /**
@@ -400,16 +385,7 @@ export class Marker extends React.PureComponent {
    * @public
    */
   getOpacity() {
-    return this.state[MARKER].getOpacity()
-  }
-
-  /**
-   *
-   * @type MarkerPlace
-   * @public
-   */
-  getPlace() {
-    return this.state[MARKER].getPlace()
+    return this.state[MARKER].getOpacity();
   }
 
   /**
@@ -418,7 +394,7 @@ export class Marker extends React.PureComponent {
    * @public
    */
   getPosition() {
-    return this.state[MARKER].getPosition()
+    return this.state[MARKER].getPosition();
   }
 
   /**
@@ -427,7 +403,7 @@ export class Marker extends React.PureComponent {
    * @public
    */
   getShape() {
-    return this.state[MARKER].getShape()
+    return this.state[MARKER].getShape();
   }
 
   /**
@@ -436,7 +412,7 @@ export class Marker extends React.PureComponent {
    * @public
    */
   getTitle() {
-    return this.state[MARKER].getTitle()
+    return this.state[MARKER].getTitle();
   }
 
   /**
@@ -445,7 +421,7 @@ export class Marker extends React.PureComponent {
    * @public
    */
   getVisible() {
-    return this.state[MARKER].getVisible()
+    return this.state[MARKER].getVisible();
   }
 
   /**
@@ -454,90 +430,91 @@ export class Marker extends React.PureComponent {
    * @public
    */
   getZIndex() {
-    return this.state[MARKER].getZIndex()
+    return this.state[MARKER].getZIndex();
+  }
+
+  render() {
+    const { children } = this.props;
+    return <div>{children}</div>;
   }
 }
 
-export default Marker
+export default Marker;
 
 const eventMap = {
-  onDblClick: "dblclick",
-  onDragEnd: "dragend",
-  onDragStart: "dragstart",
-  onMouseDown: "mousedown",
-  onMouseOut: "mouseout",
-  onMouseOver: "mouseover",
-  onMouseUp: "mouseup",
-  onRightClick: "rightclick",
-  onAnimationChanged: "animation_changed",
-  onClick: "click",
-  onClickableChanged: "clickable_changed",
-  onCursorChanged: "cursor_changed",
-  onDrag: "drag",
-  onDraggableChanged: "draggable_changed",
-  onFlatChanged: "flat_changed",
-  onIconChanged: "icon_changed",
-  onPositionChanged: "position_changed",
-  onShapeChanged: "shape_changed",
-  onTitleChanged: "title_changed",
-  onVisibleChanged: "visible_changed",
-  onZindexChanged: "zindex_changed",
-}
+  onDblClick: 'dblclick',
+  onDragEnd: 'dragend',
+  onDragStart: 'dragstart',
+  onMouseDown: 'mousedown',
+  onMouseOut: 'mouseout',
+  onMouseOver: 'mouseover',
+  onMouseUp: 'mouseup',
+  onRightClick: 'rightclick',
+  onAnimationChanged: 'animation_changed',
+  onClick: 'click',
+  onClickableChanged: 'clickable_changed',
+  onCursorChanged: 'cursor_changed',
+  onDrag: 'drag',
+  onDraggableChanged: 'draggable_changed',
+  onFlatChanged: 'flat_changed',
+  onIconChanged: 'icon_changed',
+  onPositionChanged: 'position_changed',
+  onShapeChanged: 'shape_changed',
+  onTitleChanged: 'title_changed',
+  onVisibleChanged: 'visible_changed',
+  onZindexChanged: 'zindex_changed',
+};
 
 const updaterMap = {
   animation(instance, animation) {
-    instance.setAnimation(animation)
+    instance.setAnimation(animation);
   },
 
   clickable(instance, clickable) {
-    instance.setClickable(clickable)
+    instance.setClickable(clickable);
   },
 
   cursor(instance, cursor) {
-    instance.setCursor(cursor)
+    instance.setCursor(cursor);
   },
 
   draggable(instance, draggable) {
-    instance.setDraggable(draggable)
+    instance.setDraggable(draggable);
   },
 
   icon(instance, icon) {
-    instance.setIcon(icon)
+    instance.setIcon(icon);
   },
 
   label(instance, label) {
-    instance.setLabel(label)
+    instance.setLabel(label);
   },
 
   opacity(instance, opacity) {
-    instance.setOpacity(opacity)
+    instance.setOpacity(opacity);
   },
 
   options(instance, options) {
-    instance.setOptions(options)
-  },
-
-  place(instance, place) {
-    instance.setPlace(place)
+    instance.setOptions(options);
   },
 
   position(instance, position) {
-    instance.setPosition(position)
+    instance.setPosition(position);
   },
 
   shape(instance, shape) {
-    instance.setShape(shape)
+    instance.setShape(shape);
   },
 
   title(instance, title) {
-    instance.setTitle(title)
+    instance.setTitle(title);
   },
 
   visible(instance, visible) {
-    instance.setVisible(visible)
+    instance.setVisible(visible);
   },
 
   zIndex(instance, zIndex) {
-    instance.setZIndex(zIndex)
+    instance.setZIndex(zIndex);
   },
-}
+};
